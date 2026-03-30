@@ -42,6 +42,58 @@ const Home = () => {
           overflow-x: hidden;
         }
 
+        /* ── NAVBAR ── */
+        .sb-nav {
+          position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+          height: 68px;
+          background: rgba(255,255,255,0.96);
+          backdrop-filter: blur(16px);
+          border-bottom: 1px solid #e8f5f0;
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 0 80px;
+          box-shadow: 0 2px 16px rgba(26,122,110,0.06);
+        }
+        .sb-nav-logo {
+          display: flex; align-items: center; gap: 10px;
+          text-decoration: none; font-size: 1.1rem; font-weight: 800;
+          color: #1a7a6e; letter-spacing: -0.02em;
+        }
+        .sb-nav-logo-mark {
+          width: 36px; height: 36px; border-radius: 10px;
+          background: #1a7a6e;
+          display: flex; align-items: center; justify-content: center;
+          color: white; flex-shrink: 0;
+        }
+        .sb-nav-links {
+          display: flex; align-items: center; gap: 6px;
+        }
+        .sb-nav-link {
+          padding: 8px 18px; border-radius: 100px;
+          font-size: 0.875rem; font-weight: 600; color: #6b7280;
+          text-decoration: none; transition: all 0.18s;
+        }
+        .sb-nav-link:hover { background: #f0faf8; color: #1a7a6e; }
+        .sb-nav-btn-login {
+          padding: 9px 22px; border-radius: 100px;
+          font-size: 0.875rem; font-weight: 700;
+          color: #1a7a6e; text-decoration: none;
+          border: 2px solid #1a7a6e; transition: all 0.2s;
+        }
+        .sb-nav-btn-login:hover { background: #1a7a6e; color: white; }
+        .sb-nav-btn-signup {
+          padding: 9px 22px; border-radius: 100px;
+          font-size: 0.875rem; font-weight: 700;
+          background: #1a7a6e; color: white;
+          text-decoration: none; transition: all 0.2s;
+          box-shadow: 0 4px 14px rgba(26,122,110,0.35);
+        }
+        .sb-nav-btn-signup:hover { background: #155f55; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,122,110,0.45); }
+
+        @media (max-width: 768px) {
+          .sb-nav { padding: 0 20px; }
+          .sb-nav-link { display: none; }
+        }
+
         /* ── HERO ── */
         .sb-hero {
           min-height: 100vh;
@@ -49,7 +101,7 @@ const Home = () => {
           display: grid;
           grid-template-columns: 1fr 1fr;
           align-items: center;
-          padding: 60px 80px;
+          padding: 100px 80px 60px;
           position: relative;
           overflow: hidden;
           gap: 40px;
@@ -342,7 +394,7 @@ const Home = () => {
         }
 
         @media (max-width: 1024px) {
-          .sb-hero { grid-template-columns: 1fr; padding: 40px 32px 60px; text-align: center; }
+          .sb-hero { grid-template-columns: 1fr; padding: 110px 32px 60px; text-align: center; }
           .sb-hero-tag { justify-content: center; }
           .sb-hero-p { margin: 0 auto 36px; }
           .sb-hero-btns { justify-content: center; }
@@ -358,7 +410,7 @@ const Home = () => {
           .sb-footer { padding: 28px 32px; }
         }
         @media (max-width: 600px) {
-          .sb-hero { padding: 30px 20px 50px; }
+          .sb-hero { padding: 100px 20px 50px; }
           .sb-feat-grid { grid-template-columns: 1fr; }
           .sb-cta { margin: 0 16px 60px; }
           .sb-footer { padding: 24px 20px; }
@@ -368,6 +420,31 @@ const Home = () => {
       `}</style>
 
       <div className="sb">
+
+        {/* ── NAVBAR ── */}
+        <nav className="sb-nav">
+          <Link to="/" className="sb-nav-logo">
+            <div className="sb-nav-logo-mark">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5}
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            Study Buddy
+          </Link>
+          <div className="sb-nav-links">
+            <a href="#features" className="sb-nav-link">Features</a>
+            <a href="#" className="sb-nav-link">About</a>
+            {user ? (
+              <Link to={getDashboardLink()} className="sb-nav-btn-signup">Dashboard →</Link>
+            ) : (
+              <>
+                <Link to="/login" className="sb-nav-btn-login">Login</Link>
+                <Link to="/register" className="sb-nav-btn-signup">Sign Up</Link>
+              </>
+            )}
+          </div>
+        </nav>
 
         {/* ── HERO ── */}
         <section className="sb-hero">

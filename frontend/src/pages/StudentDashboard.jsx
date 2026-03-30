@@ -89,6 +89,13 @@ const StudentDashboard = () => {
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
+
+      {/* Hide global navbar on this page only */}
+      <style>{`
+        .global-navbar { display: none !important; }
+        nav.navbar  { display: none !important; }
+      `}</style>
+
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div
@@ -104,16 +111,20 @@ const StudentDashboard = () => {
         } fixed lg:relative lg:translate-x-0 z-30 w-64 bg-white h-full shadow-xl transition-transform duration-300 ease-in-out`}
       >
         <div className="flex flex-col h-full">
+
           {/* Sidebar Header */}
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                {/* ✅ teal logo mark instead of blue-purple */}
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+                  style={{ background: '#1a7a6e' }}>
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
-                <span className="text-lg font-bold text-gray-800">Student Portal</span>
+                {/* ✅ teal text */}
+                <span className="text-lg font-bold" style={{ color: '#1a7a6e' }}>Study Buddy</span>
               </div>
               <button
                 onClick={() => setIsSidebarOpen(false)}
@@ -136,9 +147,10 @@ const StudentDashboard = () => {
                     onClick={() => setIsSidebarOpen(false)}
                     className={`flex items-center justify-between px-4 py-3 rounded-lg transition ${
                       isActive(item.path)
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md'
+                        ? 'text-white shadow-md'  /* ✅ active: teal bg via inline style */
                         : 'text-gray-700 hover:bg-gray-100'
                     }`}
+                    style={isActive(item.path) ? { background: '#1a7a6e' } : {}}
                   >
                     <div className="flex items-center space-x-3">
                       {item.icon}
@@ -157,9 +169,11 @@ const StudentDashboard = () => {
 
           {/* Sidebar Footer */}
           <div className="p-4 border-t border-gray-200">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
+            {/* ✅ teal tinted box instead of blue-purple */}
+            <div className="rounded-lg p-4" style={{ background: 'linear-gradient(135deg, #f0faf8, #e8f5f0)', border: '1px solid #d1faf4' }}>
               <div className="flex items-center space-x-2 mb-2">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  style={{ color: '#1a7a6e' }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 <span className="font-semibold text-gray-800">AI Features</span>
@@ -169,11 +183,13 @@ const StudentDashboard = () => {
               </p>
             </div>
           </div>
+
         </div>
       </aside>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
+
         {/* Mobile Header */}
         <header className="lg:hidden bg-white border-b border-gray-200 px-4 py-3">
           <div className="flex items-center justify-between">
@@ -185,7 +201,8 @@ const StudentDashboard = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <span className="text-lg font-bold text-gray-800">Student Portal</span>
+            {/* ✅ teal text */}
+            <span className="text-lg font-bold" style={{ color: '#1a7a6e' }}>Study Buddy</span>
             <div className="w-6"></div>
           </div>
         </header>
@@ -202,6 +219,7 @@ const StudentDashboard = () => {
             <Route path="/profile" element={<StudentProfile />} />
           </Routes>
         </main>
+
       </div>
     </div>
   );
