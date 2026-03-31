@@ -433,8 +433,8 @@ const Home = () => {
             Study Buddy
           </Link>
           <div className="sb-nav-links">
-            <a href="#features" className="sb-nav-link">Features</a>
-            <a href="#" className="sb-nav-link">About</a>
+            {/* <a href="#features" className="sb-nav-link">Features</a>
+            <a href="#" className="sb-nav-link">About</a> */}
             {user ? (
               <Link to={getDashboardLink()} className="sb-nav-btn-signup">Dashboard →</Link>
             ) : (
