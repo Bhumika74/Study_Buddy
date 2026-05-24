@@ -91,6 +91,7 @@ const StudentDashboard = () => {
   };
 
   return (
+<<<<<<< HEAD
     <div style={{ display: 'flex', height: '100vh', background: '#0d1117', overflow: 'hidden', fontFamily: "'Inter', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -115,11 +116,23 @@ const StudentDashboard = () => {
       `}</style>
 
       {/* Mobile Overlay */}
+=======
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
+
+      {/* Hide global navbar on this page only */}
+      <style>{`
+        .global-navbar { display: none !important; }
+        nav.navbar  { display: none !important; }
+      `}</style>
+
+      {/* Mobile Sidebar Overlay */}
+>>>>>>> 32f3dcd11122fc2299a77435e264b8f56721f81e
       {isSidebarOpen && (
         <div className="sd-mobile-overlay" onClick={() => setIsSidebarOpen(false)} />
       )}
 
       {/* Sidebar */}
+<<<<<<< HEAD
       <aside className={`sd-sidebar${isSidebarOpen ? ' open' : ''}`}>
         {/* Logo */}
         <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
@@ -128,6 +141,35 @@ const StudentDashboard = () => {
               <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg,#a855f7,#ec4899)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <svg className="w-5 h-5" style={{ color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+=======
+      <aside
+        className={`${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } fixed lg:relative lg:translate-x-0 z-30 w-64 bg-white h-full shadow-xl transition-transform duration-300 ease-in-out`}
+      >
+        <div className="flex flex-col h-full">
+
+          {/* Sidebar Header */}
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                {/* ✅ teal logo mark instead of blue-purple */}
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+                  style={{ background: '#1a7a6e' }}>
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                {/* ✅ teal text */}
+                <span className="text-lg font-bold" style={{ color: '#1a7a6e' }}>Study Buddy</span>
+              </div>
+              <button
+                onClick={() => setIsSidebarOpen(false)}
+                className="lg:hidden text-gray-600 hover:text-gray-800"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+>>>>>>> 32f3dcd11122fc2299a77435e264b8f56721f81e
                 </svg>
               </div>
               <span style={{ color: 'white', fontWeight: 800, fontSize: '1rem', letterSpacing: '-0.01em' }}>Student Portal</span>
@@ -140,6 +182,7 @@ const StudentDashboard = () => {
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* Search */}
         <div style={{ padding: '14px 16px 10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.05)', borderRadius: 10, padding: '8px 12px', border: '1px solid rgba(255,255,255,0.07)' }}>
@@ -180,13 +223,61 @@ const StudentDashboard = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
               <span style={{ fontWeight: 700, color: 'white', fontSize: '0.8rem' }}>AI Features Active</span>
+=======
+          {/* Navigation */}
+          <nav className="flex-1 p-4 overflow-y-auto">
+            <ul className="space-y-2">
+              {navigation.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    onClick={() => setIsSidebarOpen(false)}
+                    className={`flex items-center justify-between px-4 py-3 rounded-lg transition ${
+                      isActive(item.path)
+                        ? 'text-white shadow-md'  /* ✅ active: teal bg via inline style */
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                    style={isActive(item.path) ? { background: '#1a7a6e' } : {}}
+                  >
+                    <div className="flex items-center space-x-3">
+                      {item.icon}
+                      <span className="font-medium">{item.name}</span>
+                    </div>
+                    {item.badge && (
+                      <span className="px-2 py-1 text-xs bg-green-500 text-white rounded-full">
+                        {item.badge}
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Sidebar Footer */}
+          <div className="p-4 border-t border-gray-200">
+            {/* ✅ teal tinted box instead of blue-purple */}
+            <div className="rounded-lg p-4" style={{ background: 'linear-gradient(135deg, #f0faf8, #e8f5f0)', border: '1px solid #d1faf4' }}>
+              <div className="flex items-center space-x-2 mb-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  style={{ color: '#1a7a6e' }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span className="font-semibold text-gray-800">AI Features</span>
+              </div>
+              <p className="text-xs text-gray-600">
+                Powered by advanced AI to enhance your learning experience
+              </p>
+>>>>>>> 32f3dcd11122fc2299a77435e264b8f56721f81e
             </div>
             <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.5 }}>Powered by advanced AI to enhance your learning</p>
           </div>
+
         </div>
       </aside>
 
       {/* Main Content */}
+<<<<<<< HEAD
       <div className="sd-main">
         {/* Mobile Header */}
         <header className="sd-mobile-header">
@@ -197,6 +288,25 @@ const StudentDashboard = () => {
           </button>
           <span style={{ color: 'white', fontWeight: 800, fontSize: '1rem' }}>Student Portal</span>
           <div style={{ width: 24 }} />
+=======
+      <div className="flex-1 flex flex-col overflow-hidden">
+
+        {/* Mobile Header */}
+        <header className="lg:hidden bg-white border-b border-gray-200 px-4 py-3">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="text-gray-600 hover:text-gray-800"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            {/* ✅ teal text */}
+            <span className="text-lg font-bold" style={{ color: '#1a7a6e' }}>Study Buddy</span>
+            <div className="w-6"></div>
+          </div>
+>>>>>>> 32f3dcd11122fc2299a77435e264b8f56721f81e
         </header>
 
         {/* Content Area */}
@@ -212,6 +322,7 @@ const StudentDashboard = () => {
             <Route path="/profile" element={<StudentProfile />} />
           </Routes>
         </main>
+
       </div>
     </div>
   );
