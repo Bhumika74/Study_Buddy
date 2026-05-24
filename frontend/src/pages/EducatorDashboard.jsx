@@ -1,5 +1,11 @@
 import { useState } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import EducatorHome from './educator/EducatorHome';
+import CourseManagement from './educator/CourseManagement';
+import AssignmentManagement from './educator/AssignmentManagement';
+import MaterialManagement from './educator/MaterialManagement';
+import StudentProgress from './educator/StudentProgress';
+import EducatorProfile from './educator/EducatorProfile';
 
 const EducatorDashboard = () => {
   const location = useLocation();
@@ -34,7 +40,7 @@ const EducatorDashboard = () => {
       )
     },
     {
-      name: 'Students',
+      name: 'Student Progress',
       path: '/educator/students',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,184 +75,115 @@ const EducatorDashboard = () => {
     return location.pathname.startsWith(path);
   };
 
-  const EducatorHome = () => (
-    <div className="space-y-6">
-      <div className="bg-gradient-to-r from-green-600 to-teal-600 rounded-2xl p-8 text-white shadow-xl">
-        <h1 className="text-3xl font-bold mb-2">Educator Dashboard</h1>
-        <p className="text-green-100">Create and manage courses, assignments, and student progress</p>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-6 shadow-md">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl">📚</span>
-            <span className="text-3xl font-bold text-blue-600">12</span>
-          </div>
-          <p className="text-gray-600 font-medium">Active Courses</p>
-        </div>
-        <div className="bg-white rounded-xl p-6 shadow-md">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl">👥</span>
-            <span className="text-3xl font-bold text-purple-600">156</span>
-          </div>
-          <p className="text-gray-600 font-medium">Total Students</p>
-        </div>
-        <div className="bg-white rounded-xl p-6 shadow-md">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl">📝</span>
-            <span className="text-3xl font-bold text-green-600">23</span>
-          </div>
-          <p className="text-gray-600 font-medium">Assignments</p>
-        </div>
-        <div className="bg-white rounded-xl p-6 shadow-md">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl">⭐</span>
-            <span className="text-3xl font-bold text-orange-600">4.8</span>
-          </div>
-          <p className="text-gray-600 font-medium">Avg Rating</p>
-        </div>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
-          <div className="space-y-2">
-            <Link
-              to="/educator/courses"
-              className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition"
-            >
-              <span className="text-2xl">➕</span>
-              <span className="font-medium text-gray-800">Create New Course</span>
-            </Link>
-            <Link
-              to="/educator/assignments"
-              className="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition"
-            >
-              <span className="text-2xl">📋</span>
-              <span className="font-medium text-gray-800">Create Assignment</span>
-            </Link>
-            <Link
-              to="/educator/materials"
-              className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg hover:bg-green-100 transition"
-            >
-              <span className="text-2xl">📤</span>
-              <span className="font-medium text-gray-800">Upload Materials</span>
-            </Link>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Educator Features</h2>
-          <div className="space-y-3">
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✓</span>
-              <span className="text-sm text-gray-700">Create and manage course curriculum</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✓</span>
-              <span className="text-sm text-gray-700">Upload notes, syllabus, and materials</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✓</span>
-              <span className="text-sm text-gray-700">Create assignments and quizzes</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✓</span>
-              <span className="text-sm text-gray-700">Track student progress and performance</span>
-            </div>
-            <div className="flex items-start space-x-2">
-              <span className="text-green-600">✓</span>
-              <span className="text-sm text-gray-700">Manage practice sessions</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div style={{ display: 'flex', height: '100vh', background: '#0d1117', overflow: 'hidden', fontFamily: "'Inter', sans-serif" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        .ed-sidebar { width: 256px; background: #0d1b2e; border-right: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; height: 100vh; flex-shrink: 0; }
+        .ed-nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 10px; margin-bottom: 4px; cursor: pointer; transition: all 0.2s; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; font-weight: 500; }
+        .ed-nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+        .ed-nav-item.active { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: white; box-shadow: 0 4px 15px rgba(6,182,212,0.35); }
+        .ed-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .ed-content { flex: 1; overflow-y: auto; padding: 28px; background: #0d1117; }
+        .ed-content::-webkit-scrollbar { width: 6px; }
+        .ed-content::-webkit-scrollbar-track { background: transparent; }
+        .ed-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .ed-mobile-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 20; }
+        @media (max-width: 1024px) {
+          .ed-sidebar { position: fixed; z-index: 30; transform: translateX(-100%); transition: transform 0.3s; }
+          .ed-sidebar.open { transform: translateX(0); }
+          .ed-mobile-header { display: flex !important; }
+        }
+        .ed-mobile-header { display: none; align-items: center; justify-content: space-between; padding: 12px 16px; background: #0d1b2e; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      `}</style>
+
       {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        ></div>
+        <div className="ed-mobile-overlay" onClick={() => setIsSidebarOpen(false)} />
       )}
 
-      <aside
-        className={`${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } fixed lg:relative lg:translate-x-0 z-30 w-64 bg-white h-full shadow-xl transition-transform duration-300 ease-in-out`}
-      >
-        <div className="flex flex-col h-full">
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                </div>
-                <span className="text-lg font-bold text-gray-800">Educator Panel</span>
-              </div>
-              <button
-                onClick={() => setIsSidebarOpen(false)}
-                className="lg:hidden text-gray-600 hover:text-gray-800"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+      <aside className={`ed-sidebar${isSidebarOpen ? ' open' : ''}`}>
+        {/* Logo */}
+        <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg,#06b6d4,#3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg style={{ width: 20, height: 20, color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
-              </button>
+              </div>
+              <span style={{ color: 'white', fontWeight: 800, fontSize: '1rem', letterSpacing: '-0.01em' }}>Educator Panel</span>
             </div>
+            <button onClick={() => setIsSidebarOpen(false)} style={{ color: 'rgba(255,255,255,0.4)', background: 'none', border: 'none', cursor: 'pointer' }} className="lg:hidden">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
+        </div>
 
-          <nav className="flex-1 p-4 overflow-y-auto">
-            <ul className="space-y-2">
-              {navigation.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    to={item.path}
-                    onClick={() => setIsSidebarOpen(false)}
-                    className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
-                      isActive(item.path)
-                        ? 'bg-gradient-to-r from-green-500 to-teal-500 text-white shadow-md'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    {item.icon}
-                    <span className="font-medium">{item.name}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+        {/* Search */}
+        <div style={{ padding: '14px 16px 10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.05)', borderRadius: 10, padding: '8px 12px', border: '1px solid rgba(255,255,255,0.07)' }}>
+            <svg style={{ width: 14, height: 14, color: 'rgba(255,255,255,0.3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0" />
+            </svg>
+            <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)' }}>Search...</span>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <nav style={{ flex: 1, padding: '8px 12px', overflowY: 'auto' }}>
+          <p style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.25)', marginBottom: 8, paddingLeft: 4 }}>Main Menu</p>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {navigation.map((item) => (
+              <li key={item.name}>
+                <Link
+                  to={item.path}
+                  onClick={() => setIsSidebarOpen(false)}
+                  className={`ed-nav-item${isActive(item.path) ? ' active' : ''}`}
+                >
+                  {item.icon}
+                  <span>{item.name}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Footer */}
+        <div style={{ padding: '12px 16px 20px' }}>
+          <div style={{ background: 'linear-gradient(135deg, rgba(6,182,212,0.15), rgba(59,130,246,0.1))', border: '1px solid rgba(6,182,212,0.2)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <svg style={{ width: 16, height: 16, color: '#06b6d4' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span style={{ fontWeight: 700, color: 'white', fontSize: '0.8rem' }}>Educator Tools</span>
+            </div>
+            <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.5 }}>Manage courses, track student progress & more</p>
+          </div>
         </div>
       </aside>
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="lg:hidden bg-white border-b border-gray-200 px-4 py-3">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="text-gray-600 hover:text-gray-800"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-            <span className="text-lg font-bold text-gray-800">Educator Panel</span>
-            <div className="w-6"></div>
-          </div>
+      {/* Main Content */}
+      <div className="ed-main">
+        <header className="ed-mobile-header">
+          <button onClick={() => setIsSidebarOpen(true)} style={{ color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <span style={{ color: 'white', fontWeight: 800, fontSize: '1rem' }}>Educator Panel</span>
+          <div style={{ width: 24 }} />
         </header>
 
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 lg:p-8">
+        <main className="ed-content">
           <Routes>
             <Route path="/" element={<EducatorHome />} />
-            <Route path="/courses" element={<div className="bg-white rounded-xl p-8 shadow-md text-center"><h2 className="text-2xl font-bold text-gray-800">Course Management - Coming Soon</h2></div>} />
-            <Route path="/assignments" element={<div className="bg-white rounded-xl p-8 shadow-md text-center"><h2 className="text-2xl font-bold text-gray-800">Assignment Management - Coming Soon</h2></div>} />
-            <Route path="/students" element={<div className="bg-white rounded-xl p-8 shadow-md text-center"><h2 className="text-2xl font-bold text-gray-800">Student Management - Coming Soon</h2></div>} />
-            <Route path="/materials" element={<div className="bg-white rounded-xl p-8 shadow-md text-center"><h2 className="text-2xl font-bold text-gray-800">Materials Upload - Coming Soon</h2></div>} />
-            <Route path="/profile" element={<div className="bg-white rounded-xl p-8 shadow-md text-center"><h2 className="text-2xl font-bold text-gray-800">Profile - Coming Soon</h2></div>} />
+            <Route path="/courses" element={<CourseManagement />} />
+            <Route path="/assignments" element={<AssignmentManagement />} />
+            <Route path="/students" element={<StudentProgress />} />
+            <Route path="/materials" element={<MaterialManagement />} />
+            <Route path="/profile" element={<EducatorProfile />} />
           </Routes>
         </main>
       </div>

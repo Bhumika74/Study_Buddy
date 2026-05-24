@@ -33,30 +33,30 @@ const FormattedAnswer = ({ text }) => {
         else { subItems.push({ type: 'text', text: sub }); j++; }
       }
       elements.push(
-        <div key={i} className="mb-4 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+        <div key={i} className="mb-4 rounded-xl overflow-hidden shadow-sm" style={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.08)' }}>
           {/* ✅ teal question header */}
-          <div className="flex items-start gap-3 p-4 border-b border-teal-100" style={{ background: 'linear-gradient(to right, #f0faf8, #f5f0ff)' }}>
+          <div className="flex items-start gap-3 p-4" style={{ background: 'linear-gradient(to right, rgba(26, 122, 110, 0.15), rgba(168, 85, 247, 0.15))', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
             <span className="flex-shrink-0 w-7 h-7 rounded-full text-white text-sm font-bold flex items-center justify-center" style={{ background: '#1a7a6e' }}>
               {num}
             </span>
-            <p className="font-semibold text-gray-800 leading-snug pt-0.5">{content}</p>
+            <p className="font-semibold text-white leading-snug pt-0.5">{content}</p>
           </div>
           {subItems.length > 0 && (
             <div className="p-3 space-y-1">
               {subItems.map((item, si) => {
                 if (item.type === 'option') return (
-                  <div key={si} className="flex items-start gap-2 px-3 py-2 rounded-lg hover:bg-gray-50">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-md bg-gray-100 text-gray-600 text-xs font-bold flex items-center justify-center">{item.label}</span>
-                    <span className="text-sm text-gray-700">{item.text}</span>
+                  <div key={si} className="flex items-start gap-2 px-3 py-2 rounded-lg hover:bg-white/5">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-md text-xs font-bold flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)' }}>{item.label}</span>
+                    <span className="text-sm text-gray-300">{item.text}</span>
                   </div>
                 );
                 if (item.type === 'answer') return (
-                  <div key={si} className="flex items-center gap-2 mt-2 px-3 py-2 bg-green-50 border border-green-200 rounded-lg">
-                    <span className="text-green-600 font-bold text-xs">✓ Answer:</span>
-                    <span className="text-sm text-green-800 font-medium">{item.text}</span>
+                  <div key={si} className="flex items-center gap-2 mt-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
+                    <span className="text-green-400 font-bold text-xs">✓ Answer:</span>
+                    <span className="text-sm text-green-300 font-medium">{item.text}</span>
                   </div>
                 );
-                return <p key={si} className="text-sm text-gray-600 px-2">{item.text}</p>;
+                return <p key={si} className="text-sm text-gray-400 px-2">{item.text}</p>;
               })}
             </div>
           )}
@@ -68,7 +68,7 @@ const FormattedAnswer = ({ text }) => {
     const headingMatch = line.match(/^#{1,3}\s+(.+)/);
     if (headingMatch || (line.endsWith(':') && line.length < 60 && !line.match(/^[A-Da-d][.)]/))) {
       const title = headingMatch ? headingMatch[1] : line.slice(0, -1);
-      elements.push(<h3 key={i} className="font-bold text-gray-800 text-base mt-4 mb-2 pb-1 border-b border-gray-200">{title}</h3>);
+      elements.push(<h3 key={i} className="font-bold text-white text-base mt-4 mb-2 pb-1 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>{title}</h3>);
       i++; continue;
     }
 
@@ -79,7 +79,7 @@ const FormattedAnswer = ({ text }) => {
       elements.push(
         <ul key={i} className="mb-3 space-y-1">
           {bullets.map((b, bi) => (
-            <li key={bi} className="flex items-start gap-2 text-sm text-gray-700">
+            <li key={bi} className="flex items-start gap-2 text-sm text-gray-300">
               {/* ✅ teal bullet */}
               <span className="mt-1 flex-shrink-0" style={{ color: '#1a7a6e' }}>•</span>
               <span>{b}</span>
@@ -101,15 +101,15 @@ const FormattedAnswer = ({ text }) => {
     const answerLine = line.match(/^(Answer|Correct answer|Ans)[\s:]+(.+)/i);
     if (answerLine) {
       elements.push(
-        <div key={i} className="mb-2 flex items-center gap-2 px-3 py-2 bg-green-50 border border-green-200 rounded-lg">
-          <span className="text-green-600 font-bold text-xs">✓ Answer:</span>
-          <span className="text-sm text-green-800 font-medium">{answerLine[2]}</span>
+        <div key={i} className="mb-2 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
+          <span className="text-green-400 font-bold text-xs">✓ Answer:</span>
+          <span className="text-sm text-green-300 font-medium">{answerLine[2]}</span>
         </div>
       );
       i++; continue;
     }
 
-    elements.push(<p key={i} className="text-sm text-gray-700 leading-relaxed mb-2">{line}</p>);
+    elements.push(<p key={i} className="text-sm text-gray-300 leading-relaxed mb-2">{line}</p>);
     i++;
   }
 
@@ -346,10 +346,10 @@ const UploadMaterial = () => {
     ? quizFile.quiz.filter((q, i) => quizAnswers[i] === q.correct).length : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ fontFamily: "'Inter', sans-serif", color: 'white' }}>
 
       {/* Header — ✅ teal + purple contrast */}
-      <div className="bg-white rounded-xl shadow-md p-6">
+      <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }} className="rounded-xl shadow-md p-6">
         <div className="flex items-center space-x-3 mb-2">
           <div className="w-12 h-12 rounded-lg flex items-center justify-center"
             style={{ background: '#1a7a6e' }}>
@@ -358,29 +358,29 @@ const UploadMaterial = () => {
             </svg>
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Upload Study Materials</h1>
-            <p className="text-gray-600">Upload notes, books, or documents for AI-powered analysis</p>
+            <h1 className="text-2xl font-bold text-white">Upload Study Materials</h1>
+            <p className="text-gray-400">Upload notes, books, or documents for AI-powered analysis</p>
           </div>
         </div>
       </div>
 
       {/* Upload Area */}
-      <div className="bg-white rounded-xl shadow-md p-6">
+      <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }} className="rounded-xl shadow-md p-6">
         <div
           onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave}
           onClick={() => !processing && fileInputRef.current?.click()}
           className={`border-2 border-dashed rounded-xl p-12 text-center transition cursor-pointer`}
           style={isDragging
-            ? { borderColor: '#1a7a6e', background: '#f0faf8' }
-            : { borderColor: '#d1d5db' }}
-          onMouseEnter={e => { if (!isDragging) { e.currentTarget.style.borderColor = '#1a7a6e'; e.currentTarget.style.background = '#f9fffe'; } }}
-          onMouseLeave={e => { if (!isDragging) { e.currentTarget.style.borderColor = '#d1d5db'; e.currentTarget.style.background = ''; } }}
+            ? { borderColor: '#1a7a6e', background: 'rgba(26,122,110,0.1)' }
+            : { borderColor: 'rgba(255,255,255,0.15)' }}
+          onMouseEnter={e => { if (!isDragging) { e.currentTarget.style.borderColor = '#1a7a6e'; e.currentTarget.style.background = 'rgba(26,122,110,0.04)'; } }}
+          onMouseLeave={e => { if (!isDragging) { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.background = ''; } }}
         >
-          <svg className="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-16 h-16 mx-auto mb-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
           </svg>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">Drop files here or click to upload</h3>
-          <p className="text-gray-500 mb-4">Supports PDF, DOCX, TXT, images and more</p>
+          <h3 className="text-xl font-semibold text-gray-300 mb-2">Drop files here or click to upload</h3>
+          <p className="text-gray-400 mb-4">Supports PDF, DOCX, TXT, images and more</p>
           {/* ✅ teal Choose Files button */}
           <span className="inline-block px-6 py-3 text-white rounded-lg cursor-pointer hover:shadow-lg transform hover:-translate-y-0.5 transition"
             style={{ background: '#1a7a6e' }}>
@@ -394,29 +394,29 @@ const UploadMaterial = () => {
               <div className="animate-spin rounded-full h-5 w-5 border-b-2" style={{ borderColor: '#1a7a6e' }}></div>
               <span className="font-medium">Processing with AI...</span>
             </div>
-            {processingStage && <p className="text-sm text-gray-500">{processingStage}</p>}
+            {processingStage && <p className="text-sm text-gray-400">{processingStage}</p>}
           </div>
         )}
       </div>
 
       {/* Uploaded Files */}
       {uploadedFiles.length > 0 && (
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Uploaded Materials ({uploadedFiles.length})</h2>
+        <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }} className="rounded-xl shadow-md p-6">
+          <h2 className="text-xl font-bold text-white mb-4">Uploaded Materials ({uploadedFiles.length})</h2>
           <div className="space-y-4">
             {uploadedFiles.map((file) => (
-              <div key={file.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+              <div key={file.id} style={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.06)' }} className="rounded-lg p-4 hover:shadow-md transition">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-start space-x-3 flex-1">
                     <span className="text-3xl">{getFileIcon(file.type)}</span>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800">{file.name}</h3>
-                      <div className="flex flex-wrap items-center gap-2 mt-1 text-sm text-gray-500">
+                      <h3 className="font-semibold text-white">{file.name}</h3>
+                      <div className="flex flex-wrap items-center gap-2 mt-1 text-sm text-gray-400">
                         <span>{file.size}</span><span>•</span>
                         <span>{file.uploadDate.toLocaleDateString()}</span>
                         {file.aiProcessed && (
                           <><span>•</span>
-                          <span className="flex items-center space-x-1 text-green-600">
+                          <span className="flex items-center space-x-1 text-green-400">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
@@ -434,27 +434,27 @@ const UploadMaterial = () => {
                 </div>
 
                 {selectedFile === file.id && (
-                  <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
+                  <div className="mt-4 pt-4 space-y-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                     {/* Summary — purple contrast */}
                     <div>
-                      <h4 className="font-semibold text-gray-800 mb-2 flex items-center space-x-2">
-                        <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <h4 className="font-semibold text-white mb-2 flex items-center space-x-2">
+                        <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                         <span>AI-Generated Summary</span>
                       </h4>
-                      <div className="bg-purple-50 rounded-lg p-4">
-                        <p className="text-gray-700 leading-relaxed">{file.summary}</p>
+                      <div className="rounded-lg p-4" style={{ background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.15)' }}>
+                        <p className="text-gray-300 leading-relaxed">{file.summary}</p>
                       </div>
                     </div>
 
                     {/* Key Points */}
                     {file.keyPoints?.length > 0 && (
                       <div>
-                        <h4 className="font-semibold text-gray-800 mb-2">📌 Key Points</h4>
+                        <h4 className="font-semibold text-white mb-2">📌 Key Points</h4>
                         <ul className="space-y-1">
                           {file.keyPoints.map((point, i) => (
-                            <li key={i} className="flex items-start space-x-2 text-sm text-gray-700">
+                            <li key={i} className="flex items-start space-x-2 text-sm text-gray-300">
                               {/* ✅ teal bullet */}
                               <span className="mt-0.5" style={{ color: '#1a7a6e' }}>•</span>
                               <span>{point}</span>
@@ -467,11 +467,11 @@ const UploadMaterial = () => {
                     {/* Topics — ✅ teal tags */}
                     {file.topics?.length > 0 && (
                       <div>
-                        <h4 className="font-semibold text-gray-800 mb-2">🏷️ Key Topics Identified</h4>
+                        <h4 className="font-semibold text-white mb-2">🏷️ Key Topics Identified</h4>
                         <div className="flex flex-wrap gap-2">
                           {file.topics.map((topic, index) => (
                             <span key={index} className="px-3 py-1 rounded-full text-sm font-medium"
-                              style={{ background: '#f0faf8', color: '#1a7a6e', border: '1px solid #d1faf4' }}>
+                              style={{ background: 'rgba(26,122,110,0.1)', color: '#2d9d8f', border: '1px solid rgba(26,122,110,0.25)' }}>
                               {topic}
                             </span>
                           ))}
@@ -481,14 +481,14 @@ const UploadMaterial = () => {
 
                     {/* Study Tips */}
                     {file.studyTips && (
-                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                        <p className="text-sm text-yellow-800"><span className="font-semibold">💡 Study Tip: </span>{file.studyTips}</p>
+                      <div className="rounded-lg p-3" style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)' }}>
+                        <p className="text-sm text-yellow-500"><span className="font-semibold">💡 Study Tip: </span>{file.studyTips}</p>
                       </div>
                     )}
 
                     {/* Ask Questions */}
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                      <h4 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                    <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                      <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                         💬 Ask Questions About This Material
                       </h4>
                       <div className="flex space-x-2">
@@ -498,9 +498,8 @@ const UploadMaterial = () => {
                           value={questions[file.id] || ''}
                           onChange={(e) => setQuestions(prev => ({ ...prev, [file.id]: e.target.value }))}
                           onKeyDown={(e) => e.key === 'Enter' && handleAskQuestion(file.id)}
-                          className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none transition"
-                          onFocus={e => e.target.style.borderColor = '#1a7a6e'}
-                          onBlur={e => e.target.style.borderColor = '#d1d5db'}
+                          className="flex-1 rounded-lg px-3 py-2 text-sm focus:outline-none transition"
+                          style={{ background: '#1e293b', border: '1.5px solid rgba(255,255,255,0.1)', color: '#fff' }}
                         />
                         {/* ✅ teal Ask AI button */}
                         <button
@@ -521,7 +520,7 @@ const UploadMaterial = () => {
                       </div>
 
                       {answers[file.id] && (
-                        <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4 max-h-[500px] overflow-y-auto">
+                        <div className="mt-4 rounded-xl p-4 max-h-[500px] overflow-y-auto" style={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.06)' }}>
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: '#1a7a6e' }}>AI Response</span>
                             <button onClick={() => setAnswers(prev => ({ ...prev, [file.id]: null }))}
@@ -560,7 +559,8 @@ const UploadMaterial = () => {
                         ⬇️ Download Notes
                       </button>
                       <button onClick={() => handleDelete(file.id)}
-                        className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition text-sm">
+                        className="px-4 py-2 rounded-lg transition text-sm"
+                        style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171' }}>
                         🗑️ Delete
                       </button>
                     </div>
@@ -574,51 +574,51 @@ const UploadMaterial = () => {
 
       {/* Quiz Modal */}
       {quizModal && quizFile?.quiz && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-2xl">
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}>
+          <div className="rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="sticky top-0 p-6 rounded-t-2xl" style={{ background: '#111827', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-800">📝 Quiz: {quizFile.name}</h2>
-                  <p className="text-sm text-gray-500">{quizFile.quiz.length} questions • AI-generated from your material</p>
+                  <h2 className="text-xl font-bold text-white">📝 Quiz: {quizFile.name}</h2>
+                  <p className="text-sm text-gray-400">{quizFile.quiz.length} questions • AI-generated from your material</p>
                 </div>
                 <button onClick={() => setQuizModal(null)} className="text-gray-400 hover:text-gray-600 text-2xl font-light">×</button>
               </div>
             </div>
             <div className="p-6 space-y-6">
               {quizFile.quiz.map((q, qi) => (
-                <div key={qi} className={`rounded-xl p-4 border-2 transition ${quizSubmitted ? (quizAnswers[qi] === q.correct ? 'border-green-400 bg-green-50' : 'border-red-300 bg-red-50') : 'border-gray-200'}`}>
-                  <p className="font-semibold text-gray-800 mb-3">
+                <div key={qi} className={`rounded-xl p-4 border-2 transition ${quizSubmitted ? (quizAnswers[qi] === q.correct ? 'border-green-400 bg-green-500/10' : 'border-red-300 bg-red-500/10') : 'border-gray-700 bg-white/5'}`}>
+                  <p className="font-semibold text-white mb-3">
                     {/* ✅ teal Q number */}
                     <span className="mr-2 font-bold" style={{ color: '#1a7a6e' }}>Q{qi + 1}.</span>{q.question}
                   </p>
                   <div className="space-y-2">
                     {q.options.map((opt, oi) => (
                       <label key={oi} className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition ${
-                        quizSubmitted ? oi === q.correct ? 'bg-green-100 border border-green-400' : quizAnswers[qi] === oi ? 'bg-red-100 border border-red-400' : 'bg-white border border-gray-200'
-                        : quizAnswers[qi] === oi ? 'border' : 'bg-gray-50 border border-gray-200 hover:bg-teal-50'
+                        quizSubmitted ? oi === q.correct ? 'bg-green-500/20 border border-green-400 text-white' : quizAnswers[qi] === oi ? 'bg-red-500/20 border border-red-400 text-white' : 'bg-white/5 border border-gray-700'
+                        : quizAnswers[qi] === oi ? 'border border-teal-500 bg-teal-500/10 text-white' : 'bg-white/5 border border-gray-700 hover:bg-white/10'
                       }`}
-                      style={!quizSubmitted && quizAnswers[qi] === oi ? { background: '#f0faf8', borderColor: '#1a7a6e' } : {}}>
+                      style={!quizSubmitted && quizAnswers[qi] === oi ? { background: 'rgba(26,122,110,0.1)', borderColor: '#1a7a6e' } : {}}>
                         <input type="radio" name={`q${qi}`} disabled={quizSubmitted} checked={quizAnswers[qi] === oi}
                           onChange={() => setQuizAnswers(prev => ({ ...prev, [qi]: oi }))}
                           style={{ accentColor: '#1a7a6e' }} />
-                        <span className="text-sm text-gray-700">{opt}</span>
-                        {quizSubmitted && oi === q.correct && <span className="ml-auto text-green-600 text-xs font-bold">✓ Correct</span>}
+                        <span className="text-sm text-gray-300">{opt}</span>
+                        {quizSubmitted && oi === q.correct && <span className="ml-auto text-green-400 text-xs font-bold">✓ Correct</span>}
                       </label>
                     ))}
                   </div>
                   {quizSubmitted && (
-                    <div className="mt-3 p-3 rounded-lg" style={{ background: '#f0faf8' }}>
-                      <p className="text-xs" style={{ color: '#155f55' }}><span className="font-semibold">💡 Explanation: </span>{q.explanation}</p>
+                    <div className="mt-3 p-3 rounded-lg" style={{ background: 'rgba(26,122,110,0.1)' }}>
+                      <p className="text-xs" style={{ color: '#2d9d8f' }}><span className="font-semibold">💡 Explanation: </span>{q.explanation}</p>
                     </div>
                   )}
                 </div>
               ))}
               {quizSubmitted ? (
-                <div className={`rounded-xl p-6 text-center ${quizScore >= quizFile.quiz.length * 0.8 ? 'bg-green-50 border-2 border-green-400' : quizScore >= quizFile.quiz.length * 0.5 ? 'bg-yellow-50 border-2 border-yellow-400' : 'bg-red-50 border-2 border-red-400'}`}>
+                <div className={`rounded-xl p-6 text-center ${quizScore >= quizFile.quiz.length * 0.8 ? 'bg-green-500/10 border-2 border-green-400' : quizScore >= quizFile.quiz.length * 0.5 ? 'bg-yellow-500/10 border-2 border-yellow-400' : 'bg-red-500/10 border-2 border-red-400'}`}>
                   <p className="text-4xl mb-2">{quizScore >= quizFile.quiz.length * 0.8 ? '🎉' : quizScore >= quizFile.quiz.length * 0.5 ? '📚' : '💪'}</p>
-                  <p className="text-2xl font-bold text-gray-800">{quizScore}/{quizFile.quiz.length} Correct</p>
-                  <p className="text-gray-600 mt-1">{quizScore >= quizFile.quiz.length * 0.8 ? 'Excellent work!' : quizScore >= quizFile.quiz.length * 0.5 ? 'Good effort, keep reviewing!' : 'Review the material and try again!'}</p>
+                  <p className="text-2xl font-bold text-white">{quizScore}/{quizFile.quiz.length} Correct</p>
+                  <p className="text-gray-400 mt-1">{quizScore >= quizFile.quiz.length * 0.8 ? 'Excellent work!' : quizScore >= quizFile.quiz.length * 0.5 ? 'Good effort, keep reviewing!' : 'Review the material and try again!'}</p>
                   {/* ✅ teal Try Again */}
                   <button onClick={() => { setQuizAnswers({}); setQuizSubmitted(false); }}
                     className="mt-4 px-5 py-2 text-white rounded-lg transition text-sm"
@@ -641,14 +641,14 @@ const UploadMaterial = () => {
       )}
 
       {/* Info Card — ✅ teal + purple contrast */}
-      <div className="rounded-xl p-6 border" style={{ background: 'linear-gradient(to right, #f0faf8, #f5f0ff)', borderColor: '#d1faf4' }}>
+      <div className="rounded-xl p-6 border" style={{ background: 'linear-gradient(to right, rgba(26, 122, 110, 0.08), rgba(168, 85, 247, 0.08))', borderColor: 'rgba(26, 122, 110, 0.2)' }}>
         <div className="flex items-start space-x-3">
           <svg className="w-6 h-6 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: '#1a7a6e' }}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div>
-            <h3 className="font-semibold text-gray-800 mb-2">How it works:</h3>
-            <ul className="text-sm text-gray-700 space-y-1">
+            <h3 className="font-semibold text-white mb-2">How it works:</h3>
+            <ul className="text-sm text-gray-300 space-y-1">
               <li>📂 <strong>Upload</strong> your study materials (notes, textbooks, PDFs, images)</li>
               <li>🤖 <strong>AI analyzes</strong> and extracts key information, topics & points instantly</li>
               <li>📋 <strong>Get summaries</strong>, topic identification, key points & personalized study tips</li>

@@ -24,10 +24,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    // TODO: Replace with actual API call
     try {
-      // Simulated API call
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -42,23 +40,14 @@ export const AuthProvider = ({ children }) => {
       }
       return { success: false, error: 'Invalid credentials' };
     } catch (error) {
-      // For development - mock login
-      const mockUser = {
-        id: 1,
-        name: 'Test User',
-        email,
-        role: email.includes('admin') ? 'admin' : email.includes('educator') ? 'educator' : 'student'
-      };
-      setUser(mockUser);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      return { success: true };
+      console.error('Login error:', error);
+      return { success: false, error: 'Network error. Please try again.' };
     }
   };
 
   const register = async (userData) => {
-    // TODO: Replace with actual API call
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData)
@@ -68,10 +57,11 @@ export const AuthProvider = ({ children }) => {
         const data = await response.json();
         return { success: true };
       }
-      return { success: false, error: 'Registration failed' };
+      const errData = await response.json();
+      return { success: false, error: errData.error || 'Registration failed' };
     } catch (error) {
-      // For development - mock registration
-      return { success: true };
+      console.error('Register error:', error);
+      return { success: false, error: 'Network error. Please try again.' };
     }
   };
 
@@ -82,11 +72,52 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateProfile = async (updatedData) => {
-    // TODO: Replace with actual API call
-    const updatedUser = { ...user, ...updatedData };
-    setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-    return { success: true };
+    try {
+      const response = await fetch('http://localhost:5000/api/student/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(updatedData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return { success: false, error: data.error || 'Failed to update profile' };
+      }
+
+      const updatedUser = { ...user, ...data.user };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return { success: true, user: updatedUser };
+    } catch (error) {
+      console.error('Profile update error:', error);
+      return { success: false, error: 'Network error. Please try again.' };
+    }
+  };
+
+  const socialLogin = async (userData) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/social-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('token', data.token);
+        return { success: true };
+      }
+      return { success: false, error: 'Social login failed' };
+    } catch (error) {
+      console.error('Social login error:', error);
+      return { success: false, error: 'Network error. Please try again.' };
+    }
   };
 
   const value = {
@@ -94,6 +125,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     register,
+    socialLogin,
     updateProfile,
     loading,
     isAuthenticated: !!user

@@ -1,23 +1,44 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Course = sequelize.define("Course",{
+const Course = sequelize.define("Course", {
 
-  id:{
-    type:DataTypes.UUID,
-    defaultValue:DataTypes.UUIDV4,
-    primaryKey:true
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
   },
 
-  title:DataTypes.STRING,
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
 
-  description:DataTypes.TEXT,
+  subject: DataTypes.STRING,
 
-  syllabus:DataTypes.TEXT,
+  description: DataTypes.TEXT,
 
-  materials:DataTypes.JSON,
+  grade: DataTypes.STRING,
 
-  instructorId:DataTypes.UUID
+  duration: DataTypes.INTEGER, // in weeks
+
+  maxStudents: DataTypes.INTEGER,
+
+  syllabus: DataTypes.TEXT,
+
+  materials: DataTypes.JSON,
+
+  educatorId: {
+    type: DataTypes.UUID,
+    allowNull: false
+  },
+
+  thumbnail: DataTypes.STRING,
+
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  }
 
 });
 

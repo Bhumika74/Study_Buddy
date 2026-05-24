@@ -21,7 +21,7 @@ const QuizGeneration = () => {
     { value: 'short', label: 'Short Answer' }
   ];
 
-  const handleGenerateQuiz = () => {
+  const handleGenerateQuiz = async () => {
     if (!quizConfig.topic.trim()) {
       alert('Please enter a topic!');
       return;
@@ -29,32 +29,52 @@ const QuizGeneration = () => {
 
     setGenerating(true);
 
-    // Simulate AI quiz generation
-    setTimeout(() => {
-      const mockQuiz = {
+    try {
+      const response = await fetch('http://localhost:5000/api/ai/quiz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          topic: quizConfig.topic,
+          difficulty: quizConfig.difficulty,
+          numQuestions: quizConfig.numQuestions,
+          questionType: quizConfig.questionType
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert('Error generating quiz: ' + (data.error || 'Unknown error'));
+        setGenerating(false);
+        return;
+      }
+
+      // Transform API response to match our quiz format
+      const generatedQuizData = {
         topic: quizConfig.topic,
         difficulty: quizConfig.difficulty,
-        questions: Array.from({ length: quizConfig.numQuestions }, (_, i) => ({
-          id: i + 1,
-          question: `Sample question ${i + 1} about ${quizConfig.topic}?`,
-          type: i % 2 === 0 ? 'mcq' : 'truefalse',
-          options: i % 2 === 0 ? [
-            'Option A - First answer',
-            'Option B - Second answer',
-            'Option C - Third answer',
-            'Option D - Fourth answer'
-          ] : ['True', 'False'],
-          correctAnswer: i % 2 === 0 ? 1 : 0,
-          explanation: 'This is the correct answer because...'
+        questions: data.questions.map((q, idx) => ({
+          id: idx + 1,
+          question: q.question,
+          type: q.type || 'mcq',
+          options: q.options || [],
+          correctAnswer: q.correct,
+          explanation: q.explanation || 'This is the correct answer because...'
         }))
       };
 
-      setGeneratedQuiz(mockQuiz);
+      setGeneratedQuiz(generatedQuizData);
       setCurrentQuestion(0);
       setUserAnswers({});
       setShowResults(false);
       setGenerating(false);
-    }, 2000);
+    } catch (error) {
+      console.error('Quiz generation error:', error);
+      alert('Error generating quiz. Make sure the backend is running.');
+      setGenerating(false);
+    }
   };
 
   const handleAnswerSelect = (questionId, answerIndex) => {
@@ -71,24 +91,29 @@ const QuizGeneration = () => {
   const calculateScore = () => {
     if (!generatedQuiz) return 0;
     let correct = 0;
+    let totalGradable = 0;
     generatedQuiz.questions.forEach((q) => {
-      if (userAnswers[q.id] === q.correctAnswer) {
-        correct++;
+      // Only count MCQ and True/False for scoring
+      if (q.type !== 'short') {
+        totalGradable++;
+        if (userAnswers[q.id] === q.correctAnswer) {
+          correct++;
+        }
       }
     });
-    return Math.round((correct / generatedQuiz.questions.length) * 100);
+    return totalGradable > 0 ? Math.round((correct / totalGradable) * 100) : 0;
   };
 
   const getScoreColor = (score) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return 'text-green-400';
+    if (score >= 60) return 'text-yellow-400';
+    return 'text-red-400';
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ fontFamily: "'Inter', sans-serif", color: 'white' }}>
       {/* Header */}
-      <div className="bg-white rounded-xl shadow-md p-6">
+      <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }} className="rounded-xl shadow-md p-6">
         <div className="flex items-center space-x-3">
           <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center">
             <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,21 +121,21 @@ const QuizGeneration = () => {
             </svg>
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">AI Quiz Generator</h1>
-            <p className="text-gray-600">Create personalized quizzes on any topic</p>
+            <h1 className="text-2xl font-bold text-white">AI Quiz Generator</h1>
+            <p className="text-gray-400">Create personalized quizzes on any topic</p>
           </div>
         </div>
       </div>
 
       {!generatedQuiz ? (
         /* Quiz Configuration */
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-6">Configure Your Quiz</h2>
+        <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }} className="rounded-xl shadow-md p-6">
+          <h2 className="text-xl font-bold text-white mb-6">Configure Your Quiz</h2>
           
           <div className="space-y-6">
             {/* Topic Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Topic or Subject
               </label>
               <input
@@ -118,13 +143,14 @@ const QuizGeneration = () => {
                 value={quizConfig.topic}
                 onChange={(e) => setQuizConfig({ ...quizConfig, topic: e.target.value })}
                 placeholder="e.g., Photosynthesis, World War II, Python Programming..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                style={{ background: '#1e293b', border: '1.5px solid rgba(255,255,255,0.1)', color: '#fff' }}
               />
             </div>
 
             {/* Difficulty Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Difficulty Level
               </label>
               <div className="grid grid-cols-3 gap-3">
@@ -135,7 +161,7 @@ const QuizGeneration = () => {
                     className={`px-4 py-3 rounded-lg font-medium capitalize transition ${
                       quizConfig.difficulty === diff
                         ? 'bg-green-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        : 'bg-white/5 text-gray-300 hover:bg-white/10'
                     }`}
                   >
                     {diff}
@@ -146,7 +172,7 @@ const QuizGeneration = () => {
 
             {/* Number of Questions */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Number of Questions: {quizConfig.numQuestions}
               </label>
               <input
@@ -157,8 +183,9 @@ const QuizGeneration = () => {
                 value={quizConfig.numQuestions}
                 onChange={(e) => setQuizConfig({ ...quizConfig, numQuestions: parseInt(e.target.value) })}
                 className="w-full"
+                style={{ accentColor: '#16a34a' }}
               />
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <div className="flex justify-between text-xs text-gray-400 mt-1">
                 <span>5</span>
                 <span>10</span>
                 <span>15</span>
@@ -168,16 +195,17 @@ const QuizGeneration = () => {
 
             {/* Question Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Question Type
               </label>
               <select
                 value={quizConfig.questionType}
                 onChange={(e) => setQuizConfig({ ...quizConfig, questionType: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                style={{ background: '#1e293b', border: '1.5px solid rgba(255,255,255,0.1)', color: '#fff' }}
               >
                 {questionTypes.map((type) => (
-                  <option key={type.value} value={type.value}>
+                  <option key={type.value} value={type.value} style={{ background: '#1e293b' }}>
                     {type.label}
                   </option>
                 ))}
@@ -210,16 +238,16 @@ const QuizGeneration = () => {
         /* Quiz Taking Interface */
         <div className="space-y-4">
           {/* Progress Bar */}
-          <div className="bg-white rounded-xl shadow-md p-4">
+          <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }} className="rounded-xl shadow-md p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-gray-300">
                 Question {currentQuestion + 1} of {generatedQuiz.questions.length}
               </span>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-400">
                 {Object.keys(userAnswers).length} answered
               </span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full rounded-full h-2" style={{ background: 'rgba(255,255,255,0.08)' }}>
               <div
                 className="bg-gradient-to-r from-green-500 to-teal-500 h-2 rounded-full transition-all"
                 style={{ width: `${((currentQuestion + 1) / generatedQuiz.questions.length) * 100}%` }}
@@ -228,44 +256,74 @@ const QuizGeneration = () => {
           </div>
 
           {/* Question Card */}
-          <div className="bg-white rounded-xl shadow-md p-6">
+          <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }} className="rounded-xl shadow-md p-6">
             <div className="mb-6">
-              <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium mb-4 capitalize">
+              <span className="inline-block px-3 py-1 bg-green-950/40 text-green-400 border border-green-800/40 rounded-full text-sm font-medium mb-4 capitalize">
                 {generatedQuiz.difficulty}
               </span>
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
+              <h2 className="text-xl font-bold text-white mb-4">
                 {generatedQuiz.questions[currentQuestion].question}
               </h2>
             </div>
 
-            {/* Options */}
+            {/* Options / Input for question type */}
             <div className="space-y-3 mb-6">
-              {generatedQuiz.questions[currentQuestion].options.map((option, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerSelect(generatedQuiz.questions[currentQuestion].id, index)}
-                  className={`w-full p-4 text-left rounded-lg border-2 transition ${
-                    userAnswers[generatedQuiz.questions[currentQuestion].id] === index
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-200 hover:border-green-300 hover:bg-gray-50'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+              {generatedQuiz.questions[currentQuestion].type === 'mcq' &&
+                generatedQuiz.questions[currentQuestion].options.map((option, index) => (
+                  <label
+                    key={index}
+                    className={`w-full flex items-center p-4 rounded-lg border-2 transition cursor-pointer ${
                       userAnswers[generatedQuiz.questions[currentQuestion].id] === index
-                        ? 'border-green-500 bg-green-500'
-                        : 'border-gray-300'
-                    }`}>
-                      {userAnswers[generatedQuiz.questions[currentQuestion].id] === index && (
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      )}
-                    </div>
-                    <span className="font-medium">{option}</span>
-                  </div>
-                </button>
-              ))}
+                        ? 'border-green-500'
+                        : 'border-gray-700 hover:border-green-300/40 hover:bg-white/5'
+                    }`}
+                    style={userAnswers[generatedQuiz.questions[currentQuestion].id] === index ? { background: 'rgba(16,185,129,0.1)' } : {}}
+                  >
+                    <input
+                      type="radio"
+                      name={`question_${generatedQuiz.questions[currentQuestion].id}`}
+                      checked={userAnswers[generatedQuiz.questions[currentQuestion].id] === index}
+                      onChange={() => handleAnswerSelect(generatedQuiz.questions[currentQuestion].id, index)}
+                      className="form-radio h-5 w-5 text-green-600 mr-4"
+                      style={{ accentColor: '#16a34a' }}
+                    />
+                    <span className="font-medium text-gray-200">{option}</span>
+                  </label>
+                ))}
+
+              {generatedQuiz.questions[currentQuestion].type === 'truefalse' &&
+                generatedQuiz.questions[currentQuestion].options.map((option, index) => (
+                  <label
+                    key={index}
+                    className={`w-full flex items-center p-4 rounded-lg border-2 transition cursor-pointer ${
+                      userAnswers[generatedQuiz.questions[currentQuestion].id] === index
+                        ? 'border-green-500'
+                        : 'border-gray-700 hover:border-green-300/40 hover:bg-white/5'
+                    }`}
+                    style={userAnswers[generatedQuiz.questions[currentQuestion].id] === index ? { background: 'rgba(16,185,129,0.1)' } : {}}
+                  >
+                    <input
+                      type="radio"
+                      name={`question_${generatedQuiz.questions[currentQuestion].id}`}
+                      checked={userAnswers[generatedQuiz.questions[currentQuestion].id] === index}
+                      onChange={() => handleAnswerSelect(generatedQuiz.questions[currentQuestion].id, index)}
+                      className="form-radio h-5 w-5 text-green-600 mr-4"
+                      style={{ accentColor: '#16a34a' }}
+                    />
+                    <span className="font-medium text-gray-200">{option}</span>
+                  </label>
+                ))}
+
+              {generatedQuiz.questions[currentQuestion].type === 'short' && (
+                <input
+                  type="text"
+                  className="w-full p-4 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-100"
+                  style={{ background: '#1e293b', border: '1.5px solid rgba(255,255,255,0.1)', color: '#fff' }}
+                  placeholder="Type your answer here..."
+                  value={userAnswers[generatedQuiz.questions[currentQuestion].id] || ''}
+                  onChange={e => handleAnswerSelect(generatedQuiz.questions[currentQuestion].id, e.target.value)}
+                />
+              )}
             </div>
 
             {/* Navigation */}
@@ -273,7 +331,7 @@ const QuizGeneration = () => {
               <button
                 onClick={() => setCurrentQuestion(Math.max(0, currentQuestion - 1))}
                 disabled={currentQuestion === 0}
-                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-white/5 text-gray-300 rounded-lg hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
@@ -300,26 +358,34 @@ const QuizGeneration = () => {
         /* Results View */
         <div className="space-y-4">
           {/* Score Card */}
-          <div className="bg-white rounded-xl shadow-md p-8 text-center">
+          <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }} className="rounded-xl shadow-md p-8 text-center">
             <div className="mb-4">
               <div className={`text-6xl font-bold ${getScoreColor(calculateScore())}`}>
                 {calculateScore()}%
               </div>
-              <p className="text-gray-600 mt-2">Your Score</p>
+              <p className="text-gray-400 mt-2">Your Score</p>
             </div>
             <div className="flex justify-center space-x-8 mt-6">
               <div>
-                <div className="text-2xl font-bold text-green-600">
-                  {generatedQuiz.questions.filter((q) => userAnswers[q.id] === q.correctAnswer).length}
+                <div className="text-2xl font-bold text-green-400">
+                  {generatedQuiz.questions.filter((q) => q.type !== 'short' && userAnswers[q.id] === q.correctAnswer).length}
                 </div>
-                <p className="text-sm text-gray-600">Correct</p>
+                <p className="text-sm text-gray-400">Correct</p>
               </div>
               <div>
-                <div className="text-2xl font-bold text-red-600">
-                  {generatedQuiz.questions.filter((q) => userAnswers[q.id] !== q.correctAnswer).length}
+                <div className="text-2xl font-bold text-red-400">
+                  {generatedQuiz.questions.filter((q) => q.type !== 'short' && userAnswers[q.id] !== q.correctAnswer).length}
                 </div>
-                <p className="text-sm text-gray-600">Incorrect</p>
+                <p className="text-sm text-gray-400">Incorrect</p>
               </div>
+              {generatedQuiz.questions.some((q) => q.type === 'short') && (
+                <div>
+                  <div className="text-2xl font-bold text-blue-400">
+                    {generatedQuiz.questions.filter((q) => q.type === 'short').length}
+                  </div>
+                  <p className="text-sm text-gray-400">Short Answer</p>
+                </div>
+              )}
             </div>
             <button
               onClick={() => setGeneratedQuiz(null)}
@@ -330,37 +396,58 @@ const QuizGeneration = () => {
           </div>
 
           {/* Detailed Results */}
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Review Answers</h3>
+          <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }} className="rounded-xl shadow-md p-6">
+            <h3 className="text-xl font-bold text-white mb-4">Review Answers</h3>
             <div className="space-y-4">
               {generatedQuiz.questions.map((question, index) => (
-                <div key={question.id} className="border-b border-gray-200 pb-4">
-                  <div className="flex items-start space-x-3">
-                    {userAnswers[question.id] === question.correctAnswer ? (
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div key={question.id} className="border-b border-white/5 pb-4">
+                  {question.type === 'short' ? (
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-blue-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium text-white mb-2">{question.question}</p>
+                        <p className="text-sm text-blue-400 mb-1">
+                          Your Answer: {userAnswers[question.id] || '(No answer provided)'}
+                        </p>
+                        <p className="text-sm text-gray-400 italic mt-2">{question.explanation}</p>
+                      </div>
+                    </div>
+                  ) : userAnswers[question.id] === question.correctAnswer ? (
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-green-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                    ) : (
-                      <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex-1">
+                        <p className="font-medium text-white mb-2">{question.question}</p>
+                        <p className="text-sm text-green-400 mb-1">
+                          ✓ Correct Answer: {question.options[question.correctAnswer]}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-start space-x-3">
+                      <div className="w-6 h-6 bg-red-500/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </div>
-                    )}
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-800 mb-2">{question.question}</p>
-                      <p className="text-sm text-green-600 mb-1">
-                        ✓ Correct Answer: {question.options[question.correctAnswer]}
-                      </p>
-                      {userAnswers[question.id] !== question.correctAnswer && (
-                        <p className="text-sm text-red-600">
+                      <div className="flex-1">
+                        <p className="font-medium text-white mb-2">{question.question}</p>
+                        <p className="text-sm text-green-400 mb-1">
+                          ✓ Correct Answer: {question.options[question.correctAnswer]}
+                        </p>
+                        <p className="text-sm text-red-400">
                           ✗ Your Answer: {question.options[userAnswers[question.id]] || 'Not answered'}
                         </p>
-                      )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               ))}
             </div>

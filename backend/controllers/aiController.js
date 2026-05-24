@@ -119,31 +119,71 @@ ${materialText}`;
 // ---------------- QUIZ ----------------
 exports.generateQuiz = async (req, res) => {
   try {
-    const { content } = req.body;
+    const { content, topic, difficulty = 'medium', numQuestions = 10, questionType = 'mixed' } = req.body;
 
     let materialText = "";
-    if (Array.isArray(content)) {
-      const firstMessage = content[0];
-      if (firstMessage && Array.isArray(firstMessage.content)) {
-        for (const block of firstMessage.content) {
-          if (block.type === "text") materialText += block.text + "\n";
+    let isTopicBased = false;
+
+    // Check if topic-based or content-based
+    if (topic) {
+      isTopicBased = true;
+      materialText = topic;
+    } else if (content) {
+      if (Array.isArray(content)) {
+        const firstMessage = content[0];
+        if (firstMessage && Array.isArray(firstMessage.content)) {
+          for (const block of firstMessage.content) {
+            if (block.type === "text") materialText += block.text + "\n";
+          }
+        } else {
+          materialText = JSON.stringify(content);
         }
       } else {
         materialText = JSON.stringify(content);
       }
-    } else {
-      materialText = JSON.stringify(content);
     }
 
     if (materialText.length > 2500) materialText = materialText.slice(0, 2500);
 
-    const prompt = `Create a 5-question multiple choice quiz from the study material below.
+    let prompt = '';
+    
+    if (isTopicBased) {
+      // Topic-based quiz generation
+      const questionTypeDesc = questionType === 'mixed' ? 'mix of MCQ, True/False, and Short Answer' : 
+                              questionType === 'mcq' ? 'multiple choice questions' :
+                              questionType === 'truefalse' ? 'true/false questions' :
+                              'short answer questions';
+      
+      prompt = `Generate ${numQuestions} ${difficulty} level ${questionTypeDesc} questions about "${materialText}".
 
 Return ONLY valid JSON, no markdown, no explanation:
 {
   "questions": [
     {
       "question": "Question text?",
+      "type": "mcq|truefalse|short",
+      "options": ["A) Option 1", "B) Option 2", "C) Option 3", "D) Option 4"],
+      "correct": 0,
+      "explanation": "Why this answer is correct"
+    }
+  ]
+}
+
+For MCQ: provide 4 options, "correct" is the 0-based index
+For True/False: options should be ["True", "False"], "correct" is 0 or 1
+For Short Answer: options should be empty array, "correct" should be null
+
+Create diverse and educational questions.`;
+    } else {
+      // Content-based quiz generation
+      prompt = `Create ${numQuestions} ${difficulty} level ${questionType === 'mixed' ? 'mix of MCQ and True/False' : questionType === 'mcq' ? 'multiple choice' : 'true/false'} questions from the study material below.
+
+Return ONLY valid JSON, no markdown, no explanation:
+{
+  "questions": [
+    {
+      "question": "Question text?",
+      "type": "mcq|truefalse",
       "options": ["A) Option 1", "B) Option 2", "C) Option 3", "D) Option 4"],
       "correct": 0,
       "explanation": "Why this answer is correct"
@@ -155,11 +195,12 @@ The "correct" field is the 0-based index of the correct option.
 
 Material:
 ${materialText}`;
+    }
 
     const response = await client.chat.completions.create({
       model: "llama-3.1-8b-instant",
       messages: [
-        { role: "system", content: "You generate educational quizzes. Respond with JSON only." },
+        { role: "system", content: "You are an expert educational quiz generator. Generate diverse, clear, and fair questions. Respond with JSON only, no additional text." },
         { role: "user", content: prompt }
       ]
     });
@@ -169,11 +210,11 @@ ${materialText}`;
     const last = aiText.lastIndexOf("}");
     if (first !== -1 && last !== -1) aiText = aiText.substring(first, last + 1);
 
-    res.json({ content: [{ text: aiText }] });
+    res.json({ questions: JSON.parse(aiText).questions });
 
   } catch (error) {
     console.error("Quiz Error:", error);
-    res.status(500).json({ error: "Quiz generation failed" });
+    res.status(500).json({ error: "Quiz generation failed", details: error.message });
   }
 };
 

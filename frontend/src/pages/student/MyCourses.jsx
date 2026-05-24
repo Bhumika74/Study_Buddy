@@ -46,10 +46,10 @@ const youtubeChannels = {
 };
 
 const TAG_STYLES = {
-  'Core CSE': { bg: '#f0fdf4', color: '#15803d', border: '#bbf7d0' },
-  'Science':  { bg: '#ecfeff', color: '#0e7490', border: '#a5f3fc' },
-  'Web Dev':  { bg: '#f0fdf4', color: '#065f46', border: '#a7f3d0' },
-  'DevOps':   { bg: '#f0fdfa', color: '#0f766e', border: '#99f6e4' },
+  'Core CSE': { bg: 'rgba(168,85,247,0.12)', color: '#a855f7', border: 'rgba(168,85,247,0.3)' },
+  'Science':  { bg: 'rgba(6,182,212,0.12)',  color: '#06b6d4', border: 'rgba(6,182,212,0.3)' },
+  'Web Dev':  { bg: 'rgba(16,185,129,0.12)', color: '#10b981', border: 'rgba(16,185,129,0.3)' },
+  'DevOps':   { bg: 'rgba(245,158,11,0.12)', color: '#f59e0b', border: 'rgba(245,158,11,0.3)' },
 };
 
 const COURSES = [
@@ -62,25 +62,26 @@ const COURSES = [
   { id: 7, title: 'DevOps & Cloud',               instructor: 'Prof. Priya Nair',    nextLesson: 'Docker Containers',     emoji: '☁️', tag: 'DevOps',   gradFrom: '#0891b2', gradTo: '#0f766e' },
 ];
 
-/* ── Channel Modal ── */
+/* ── Channel Modal (dark) ── */
 const ChannelModal = ({ course, onClose }) => {
   const channels = youtubeChannels[course.id] || [];
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)' }}
+      style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)' }}
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl bg-white"
-        style={{ maxHeight: '88vh', overflowY: 'auto', border: '1px solid #e5e7eb' }}
+        className="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl"
+        style={{ background: '#111827', maxHeight: '88vh', overflowY: 'auto', border: '1px solid rgba(255,255,255,0.08)' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="relative p-6 pb-4" style={{ borderBottom: '1px solid #f3f4f6' }}>
+        <div className="relative p-6 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition"
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full transition"
+            style={{ color: 'rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.07)' }}
           >✕</button>
           <div className="flex items-center space-x-4">
             <div
@@ -88,11 +89,11 @@ const ChannelModal = ({ course, onClose }) => {
               style={{ background: `linear-gradient(135deg, ${course.gradFrom}, ${course.gradTo})` }}
             >{course.emoji}</div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest mb-0.5 text-gray-400">📺 YouTube Channels</p>
-              <h2 className="text-lg font-bold text-gray-800">{course.title}</h2>
+              <p className="text-xs font-bold uppercase tracking-widest mb-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>📺 YouTube Channels</p>
+              <h2 className="text-lg font-bold" style={{ color: 'white' }}>{course.title}</h2>
             </div>
           </div>
-          <p className="text-xs text-gray-400 mt-2">Select a channel to open it on YouTube →</p>
+          <p className="text-xs mt-2" style={{ color: 'rgba(255,255,255,0.35)' }}>Select a channel to open it on YouTube →</p>
         </div>
 
         {/* Channels */}
@@ -104,18 +105,18 @@ const ChannelModal = ({ course, onClose }) => {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center space-x-3 p-3.5 rounded-xl group"
-              style={{ background: '#f9fafb', border: '1px solid #f3f4f6', transition: 'all 0.15s', textDecoration: 'none' }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#f0fdfa'; e.currentTarget.style.border = '1px solid #99f6e4'; e.currentTarget.style.transform = 'translateX(4px)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#f9fafb'; e.currentTarget.style.border = '1px solid #f3f4f6'; e.currentTarget.style.transform = 'translateX(0)'; }}
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', transition: 'all 0.15s', textDecoration: 'none' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(168,85,247,0.1)'; e.currentTarget.style.border = '1px solid rgba(168,85,247,0.3)'; e.currentTarget.style.transform = 'translateX(4px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.border = '1px solid rgba(255,255,255,0.07)'; e.currentTarget.style.transform = 'translateX(0)'; }}
             >
-              <div className="w-11 h-11 rounded-lg flex items-center justify-center text-xl flex-shrink-0 bg-gray-100">{ch.avatar}</div>
+              <div className="w-11 h-11 rounded-lg flex items-center justify-center text-xl flex-shrink-0" style={{ background: 'rgba(255,255,255,0.08)' }}>{ch.avatar}</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2">
-                  <p className="font-semibold text-sm text-gray-800 truncate">{ch.name}</p>
-                  <span className="text-xs text-gray-400 flex-shrink-0">{ch.subs}</span>
+                  <p className="font-semibold text-sm truncate" style={{ color: 'rgba(255,255,255,0.85)' }}>{ch.name}</p>
+                  <span className="text-xs flex-shrink-0" style={{ color: 'rgba(255,255,255,0.35)' }}>{ch.subs}</span>
                 </div>
-                <p className="text-xs text-gray-500 truncate mt-0.5">{ch.desc}</p>
-                <p className="text-xs text-teal-600 mt-0.5">{ch.handle}</p>
+                <p className="text-xs truncate mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>{ch.desc}</p>
+                <p className="text-xs mt-0.5" style={{ color: '#a855f7' }}>{ch.handle}</p>
               </div>
               <div className="flex-shrink-0 opacity-40 group-hover:opacity-100 transition-opacity">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF0000">
@@ -125,13 +126,12 @@ const ChannelModal = ({ course, onClose }) => {
             </a>
           ))}
         </div>
-        <p className="text-center text-xs text-gray-300 pb-4">Opens in a new tab</p>
+        <p className="text-center text-xs pb-4" style={{ color: 'rgba(255,255,255,0.2)' }}>Opens in a new tab</p>
       </div>
     </div>
   );
 };
 
-/* ── Main Component ── */
 export default function MyCourses() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [filter, setFilter] = useState('All');
@@ -140,38 +140,36 @@ export default function MyCourses() {
   const filtered = filter === 'All' ? COURSES : COURSES.filter(c => c.tag === filter);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6" style={{ fontFamily: "'DM Sans','Segoe UI',sans-serif" }}>
+    <div style={{ fontFamily: "'Inter',sans-serif", color: 'white' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         * { box-sizing: border-box; }
         .course-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .course-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.1) !important; }
-        .view-btn:hover { background: #0d9488 !important; box-shadow: 0 4px 14px rgba(20,184,166,0.4) !important; }
+        .course-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(168,85,247,0.2) !important; }
+        .view-btn:hover { opacity: 0.88 !important; transform: translateY(-1px); }
+        .mc-pill:hover { transform: scale(1.03); }
       `}</style>
 
       {/* Header */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-            style={{ background: 'linear-gradient(135deg,#0f766e,#0891b2)' }}
-          >🎓</div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-800 leading-none">Courses</h1>
-            <p className="text-xs text-gray-400 mt-0.5">{COURSES.length} courses enrolled</p>
+      <div style={{ background: 'linear-gradient(135deg,#1e0a3c 0%,#0f1f3d 50%,#0d1117 100%)', border: '1px solid rgba(168,85,247,0.2)', borderRadius: 20, padding: '28px 32px', marginBottom: 20, position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: -40, right: -40, width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle,rgba(168,85,247,0.2) 0%,transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{ width: 44, height: 44, borderRadius: 12, background: 'linear-gradient(135deg,#a855f7,#ec4899)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem' }}>🎓</div>
+            <div>
+              <p style={{ fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#a855f7', marginBottom: 4 }}>Learning Hub</p>
+              <h1 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.02em' }}>My Courses</h1>
+            </div>
           </div>
-        </div>
-        <div className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-teal-50 border border-teal-100">
-          <span className="text-base">📚</span>
-          <div>
-            <p className="text-sm font-bold text-teal-700 leading-none">{COURSES.length}</p>
-            <p className="text-xs text-teal-500">Total Courses</p>
+          <div style={{ background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.25)', borderRadius: 12, padding: '10px 18px', textAlign: 'center' }}>
+            <p style={{ fontSize: '1.4rem', fontWeight: 800, color: '#a855f7', lineHeight: 1 }}>{COURSES.length}</p>
+            <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>Total Courses</p>
           </div>
         </div>
       </div>
 
       {/* Filter Pills */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 20, alignItems: 'center' }}>
         {tags.map(tag => {
           const active = filter === tag;
           const s = TAG_STYLES[tag];
@@ -179,63 +177,59 @@ export default function MyCourses() {
             <button
               key={tag}
               onClick={() => setFilter(tag)}
-              className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-150"
-              style={
-                active && s
-                  ? { background: s.bg, color: s.color, border: `1px solid ${s.border}` }
-                  : active
-                  ? { background: '#f0fdfa', color: '#0f766e', border: '1px solid #99f6e4' }
-                  : { background: 'white', color: '#6b7280', border: '1px solid #e5e7eb' }
-              }
+              className="mc-pill"
+              style={{
+                padding: '7px 16px', borderRadius: 100, fontSize: '0.8rem', fontWeight: 600,
+                transition: 'all 0.15s', border: '1px solid',
+                background: active && s ? s.bg : active ? 'rgba(168,85,247,0.1)' : 'rgba(255,255,255,0.04)',
+                color: active && s ? s.color : active ? '#a855f7' : 'rgba(255,255,255,0.45)',
+                borderColor: active && s ? s.border : active ? 'rgba(168,85,247,0.4)' : 'rgba(255,255,255,0.08)',
+              }}
             >{tag}</button>
           );
         })}
-        <span className="ml-auto text-xs self-center text-gray-400">
+        <span style={{ marginLeft: 'auto', fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)', fontWeight: 500 }}>
           {filtered.length} course{filtered.length !== 1 ? 's' : ''}
         </span>
       </div>
 
       {/* Course Grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(220px,1fr))', gap: 16 }}>
         {filtered.map((course) => {
           const ts = TAG_STYLES[course.tag] || TAG_STYLES['Core CSE'];
           return (
             <div
               key={course.id}
-              className="course-card bg-white rounded-2xl overflow-hidden border border-gray-100"
-              style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+              className="course-card"
+              style={{ background: '#111827', borderRadius: 18, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)' }}
             >
               {/* Banner */}
               <div
-                className="relative h-28 flex items-center justify-center overflow-hidden"
-                style={{ background: `linear-gradient(135deg,${course.gradFrom},${course.gradTo})` }}
+                style={{ height: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative', background: `linear-gradient(135deg,${course.gradFrom},${course.gradTo})` }}
               >
-                <div className="absolute inset-0" style={{
-                  backgroundImage: 'radial-gradient(circle at 20% 80%,rgba(255,255,255,0.12) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(255,255,255,0.08) 0%,transparent 50%)',
-                }} />
-                <span className="text-5xl relative z-10" style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))' }}>{course.emoji}</span>
+                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 20% 80%,rgba(255,255,255,0.12) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(255,255,255,0.08) 0%,transparent 50%)' }} />
+                <span style={{ fontSize: '3.2rem', position: 'relative', zIndex: 1, filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.4))' }}>{course.emoji}</span>
                 <span
-                  className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-xs font-semibold"
-                  style={{ background: 'rgba(255,255,255,0.9)', color: ts.color, border: `1px solid ${ts.border}` }}
+                  style={{ position: 'absolute', top: 10, right: 10, padding: '3px 9px', borderRadius: 100, fontSize: '0.68rem', fontWeight: 700, background: ts.bg, color: ts.color, border: `1px solid ${ts.border}` }}
                 >{course.tag}</span>
               </div>
 
               {/* Body */}
-              <div className="p-4">
-                <h3 className="font-bold text-sm text-gray-800 leading-snug mb-0.5">{course.title}</h3>
-                <p className="text-xs text-gray-400 mb-4">by {course.instructor}</p>
+              <div style={{ padding: '14px 16px' }}>
+                <h3 style={{ fontWeight: 700, fontSize: '0.875rem', color: 'rgba(255,255,255,0.9)', marginBottom: 3, lineHeight: 1.3 }}>{course.title}</h3>
+                <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.35)', marginBottom: 12 }}>by {course.instructor}</p>
 
                 {/* Next Lesson */}
-                <div className="mb-4 px-3 py-2.5 rounded-xl bg-gray-50 border border-gray-100">
-                  <p className="text-xs text-gray-400 mb-0.5">Up next</p>
-                  <p className="text-xs font-semibold text-gray-700">{course.nextLesson}</p>
+                <div style={{ marginBottom: 14, padding: '9px 12px', borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                  <p style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.3)', marginBottom: 3 }}>Up next</p>
+                  <p style={{ fontSize: '0.78rem', fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>{course.nextLesson}</p>
                 </div>
 
-                {/* Teal View Button */}
+                {/* View Button */}
                 <button
                   onClick={() => setSelectedCourse(course)}
-                  className="view-btn w-full px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 text-white transition-all duration-200"
-                  style={{ background: '#14b8a6', boxShadow: '0 2px 8px rgba(20,184,166,0.3)' }}
+                  className="view-btn"
+                  style={{ width: '100%', padding: '9px 14px', borderRadius: 10, fontSize: '0.78rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, color: 'white', border: 'none', cursor: 'pointer', background: 'linear-gradient(135deg,#a855f7,#ec4899)', boxShadow: '0 4px 14px rgba(168,85,247,0.35)', transition: 'all 0.2s' }}
                 >
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="white">
                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />

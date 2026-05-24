@@ -1,23 +1,57 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const UploadedMaterial = sequelize.define("UploadedMaterial",{
+const UploadedMaterial = sequelize.define("UploadedMaterial", {
 
-  id:{
-    type:DataTypes.UUID,
-    defaultValue:DataTypes.UUIDV4,
-    primaryKey:true
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
   },
 
-  studentId:DataTypes.UUID,
+  courseId: {
+    type: DataTypes.UUID,
+    allowNull: false
+  },
 
-  fileName:DataTypes.STRING,
+  educatorId: {
+    type: DataTypes.UUID,
+    allowNull: false
+  },
 
-  fileUrl:DataTypes.STRING,
+  studentId: DataTypes.UUID, // optional, for student uploads
 
-  summary:DataTypes.TEXT,
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
 
-  topics:DataTypes.JSON
+  type: {
+    type: DataTypes.ENUM("notes", "syllabus", "pdf", "video", "reference", "other"),
+    defaultValue: "notes"
+  },
+
+  description: DataTypes.TEXT,
+
+  chapter: DataTypes.STRING,
+
+  fileName: DataTypes.STRING,
+
+  fileUrl: DataTypes.STRING,
+
+  summary: DataTypes.TEXT,
+
+  topics: DataTypes.JSON,
+
+  downloads: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
+
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  }
 
 });
 

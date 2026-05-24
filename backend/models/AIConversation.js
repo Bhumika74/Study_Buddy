@@ -11,6 +11,11 @@ const AIConversation = sequelize.define("AIConversation",{
 
   studentId:DataTypes.UUID,
 
+  title: {
+    type: DataTypes.STRING,
+    defaultValue: "New Chat"
+  },
+
   messages:DataTypes.JSON
 
 });

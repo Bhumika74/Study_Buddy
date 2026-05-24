@@ -7,6 +7,9 @@ import MyCourses from './student/MyCourses';
 import UploadMaterial from './student/UploadMaterial';
 import QuizGeneration from './student/QuizGeneration';
 import StudentProfile from './student/StudentProfile';
+import StudentCourses from './student/StudentCourses';
+import CourseDetails from './student/CourseDetails';
+import StudentProgress from './student/StudentProgress';
 
 const StudentDashboard = () => {
   const location = useLocation();
@@ -88,117 +91,124 @@ const StudentDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
-      {/* Mobile Sidebar Overlay */}
+    <div style={{ display: 'flex', height: '100vh', background: '#0d1117', overflow: 'hidden', fontFamily: "'Inter', sans-serif" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        .sd-sidebar { width: 256px; background: #0d1b2e; border-right: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; height: 100vh; flex-shrink: 0; }
+        .sd-nav-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-radius: 10px; margin-bottom: 4px; cursor: pointer; transition: all 0.2s; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; font-weight: 500; }
+        .sd-nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+        .sd-nav-item.active { background: linear-gradient(135deg, #a855f7, #ec4899); color: white; box-shadow: 0 4px 15px rgba(168,85,247,0.35); }
+        .sd-badge { font-size: 0.65rem; font-weight: 700; padding: 2px 7px; border-radius: 100px; background: #10b981; color: white; }
+        .sd-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .sd-content { flex: 1; overflow-y: auto; padding: 28px; background: #0d1117; }
+        .sd-content::-webkit-scrollbar { width: 6px; }
+        .sd-content::-webkit-scrollbar-track { background: transparent; }
+        .sd-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .sd-mobile-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 20; display: none; }
+        @media (max-width: 1024px) {
+          .sd-sidebar { position: fixed; z-index: 30; transform: translateX(-100%); transition: transform 0.3s; }
+          .sd-sidebar.open { transform: translateX(0); }
+          .sd-mobile-overlay { display: block; }
+          .sd-mobile-header { display: flex !important; }
+        }
+        .sd-mobile-header { display: none; align-items: center; justify-content: space-between; padding: 12px 16px; background: #0d1b2e; border-bottom: 1px solid rgba(255,255,255,0.06); }
+      `}</style>
+
+      {/* Mobile Overlay */}
       {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        ></div>
+        <div className="sd-mobile-overlay" onClick={() => setIsSidebarOpen(false)} />
       )}
 
       {/* Sidebar */}
-      <aside
-        className={`${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } fixed lg:relative lg:translate-x-0 z-30 w-64 bg-white h-full shadow-xl transition-transform duration-300 ease-in-out`}
-      >
-        <div className="flex flex-col h-full">
-          {/* Sidebar Header */}
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                <span className="text-lg font-bold text-gray-800">Student Portal</span>
-              </div>
-              <button
-                onClick={() => setIsSidebarOpen(false)}
-                className="lg:hidden text-gray-600 hover:text-gray-800"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+      <aside className={`sd-sidebar${isSidebarOpen ? ' open' : ''}`}>
+        {/* Logo */}
+        <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg,#a855f7,#ec4899)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg className="w-5 h-5" style={{ color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-              </button>
+              </div>
+              <span style={{ color: 'white', fontWeight: 800, fontSize: '1rem', letterSpacing: '-0.01em' }}>Student Portal</span>
             </div>
+            <button onClick={() => setIsSidebarOpen(false)} style={{ color: 'rgba(255,255,255,0.4)', background: 'none', border: 'none', cursor: 'pointer' }} className="lg:hidden">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
+        </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 p-4 overflow-y-auto">
-            <ul className="space-y-2">
-              {navigation.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    to={item.path}
-                    onClick={() => setIsSidebarOpen(false)}
-                    className={`flex items-center justify-between px-4 py-3 rounded-lg transition ${
-                      isActive(item.path)
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      {item.icon}
-                      <span className="font-medium">{item.name}</span>
-                    </div>
-                    {item.badge && (
-                      <span className="px-2 py-1 text-xs bg-green-500 text-white rounded-full">
-                        {item.badge}
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+        {/* Search */}
+        <div style={{ padding: '14px 16px 10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.05)', borderRadius: 10, padding: '8px 12px', border: '1px solid rgba(255,255,255,0.07)' }}>
+            <svg style={{ width: 14, height: 14, color: 'rgba(255,255,255,0.3)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0" />
+            </svg>
+            <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)' }}>Search...</span>
+          </div>
+        </div>
 
-          {/* Sidebar Footer */}
-          <div className="p-4 border-t border-gray-200">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
-              <div className="flex items-center space-x-2 mb-2">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                <span className="font-semibold text-gray-800">AI Features</span>
-              </div>
-              <p className="text-xs text-gray-600">
-                Powered by advanced AI to enhance your learning experience
-              </p>
+        {/* Navigation */}
+        <nav style={{ flex: 1, padding: '8px 12px', overflowY: 'auto' }}>
+          <p style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.25)', marginBottom: 8, paddingLeft: 4 }}>Main Menu</p>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {navigation.map((item) => (
+              <li key={item.name}>
+                <Link
+                  to={item.path}
+                  onClick={() => setIsSidebarOpen(false)}
+                  className={`sd-nav-item${isActive(item.path) ? ' active' : ''}`}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    {item.icon}
+                    <span>{item.name}</span>
+                  </div>
+                  {item.badge && <span className="sd-badge">{item.badge}</span>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Footer card */}
+        <div style={{ padding: '12px 16px 20px' }}>
+          <div style={{ background: 'linear-gradient(135deg, rgba(168,85,247,0.15), rgba(236,72,153,0.1))', border: '1px solid rgba(168,85,247,0.2)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <svg style={{ width: 16, height: 16, color: '#a855f7' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span style={{ fontWeight: 700, color: 'white', fontSize: '0.8rem' }}>AI Features Active</span>
             </div>
+            <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', lineHeight: 1.5 }}>Powered by advanced AI to enhance your learning</p>
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="sd-main">
         {/* Mobile Header */}
-        <header className="lg:hidden bg-white border-b border-gray-200 px-4 py-3">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="text-gray-600 hover:text-gray-800"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-            <span className="text-lg font-bold text-gray-800">Student Portal</span>
-            <div className="w-6"></div>
-          </div>
+        <header className="sd-mobile-header">
+          <button onClick={() => setIsSidebarOpen(true)} style={{ color: 'rgba(255,255,255,0.6)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <span style={{ color: 'white', fontWeight: 800, fontSize: '1rem' }}>Student Portal</span>
+          <div style={{ width: 24 }} />
         </header>
 
         {/* Content Area */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 lg:p-8">
+        <main className="sd-content">
           <Routes>
             <Route path="/" element={<StudentHome />} />
             <Route path="/ai-chat" element={<AIChat />} />
             <Route path="/upload" element={<UploadMaterial />} />
             <Route path="/quiz" element={<QuizGeneration />} />
-            <Route path="/courses" element={<MyCourses />} />
-            <Route path="/progress" element={<MyProgress />} />
+            <Route path="/courses" element={<StudentCourses />} />
+            <Route path="/course/:courseId" element={<CourseDetails />} />
+            <Route path="/progress" element={<StudentProgress />} />
             <Route path="/profile" element={<StudentProfile />} />
           </Routes>
         </main>

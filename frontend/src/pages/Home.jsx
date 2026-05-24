@@ -32,20 +32,20 @@ const Home = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         .sb {
-          font-family: 'Sora', sans-serif;
-          background: #F7F8FA;
-          color: #0D1117;
+          font-family: 'Inter', sans-serif;
+          background: #0d1117;
+          color: #ffffff;
           overflow-x: hidden;
         }
 
         /* ── HERO ── */
         .sb-hero {
           min-height: 100vh;
-          background: #FFFFFF;
+          background: linear-gradient(135deg, #0d1117 0%, #0d1b2e 50%, #0d1117 100%);
           display: grid;
           grid-template-columns: 1fr 1fr;
           align-items: center;
@@ -55,13 +55,13 @@ const Home = () => {
           gap: 40px;
         }
 
-        /* subtle grid lines like GlobalTalk */
+        /* subtle grid lines */
         .sb-hero::before {
           content: '';
           position: absolute; inset: 0;
           background-image:
-            linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+            linear-gradient(rgba(168,85,247,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(168,85,247,0.04) 1px, transparent 1px);
           background-size: 80px 80px;
           pointer-events: none; z-index: 0;
         }
@@ -75,14 +75,14 @@ const Home = () => {
         .sb-hero-tag {
           font-size: 0.72rem; font-weight: 700;
           text-transform: uppercase; letter-spacing: 0.18em;
-          color: #1a7a6e;
+          color: #a855f7;
           display: flex; align-items: center; gap: 8px;
           margin-bottom: 20px;
         }
         .sb-hero-tag::before {
           content: '';
           display: block; width: 28px; height: 2px;
-          background: #1a7a6e; border-radius: 2px;
+          background: linear-gradient(90deg,#a855f7,#ec4899); border-radius: 2px;
         }
 
         .sb-hero-h1 {
@@ -90,13 +90,13 @@ const Home = () => {
           font-weight: 800;
           line-height: 1.06;
           letter-spacing: -0.03em;
-          color: #0D1117;
+          color: #ffffff;
           margin-bottom: 20px;
         }
-        .sb-hero-h1 .teal { color: #1a7a6e; }
+        .sb-hero-h1 .teal { background: linear-gradient(135deg,#a855f7,#ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 
         .sb-hero-p {
-          font-size: 1rem; color: #6b7280;
+          font-size: 1rem; color: rgba(255,255,255,0.5);
           line-height: 1.75; max-width: 420px;
           font-weight: 400; margin-bottom: 36px;
         }
@@ -105,34 +105,34 @@ const Home = () => {
         .sb-hero-btns { display: flex; align-items: center; gap: 14px; margin-bottom: 52px; flex-wrap: wrap; }
 
         .sb-btn-signin {
-          font-size: 0.9rem; font-weight: 600; color: #0D1117;
+          font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.7);
           text-decoration: none; display: flex; align-items: center; gap: 6px;
-          transition: gap 0.2s;
+          transition: gap 0.2s; border: 1px solid rgba(255,255,255,0.12); padding: 11px 22px; border-radius: 100px;
         }
-        .sb-btn-signin:hover { gap: 10px; }
-        .sb-btn-signin::after { content: '+'; font-size: 1rem; font-weight: 800; }
+        .sb-btn-signin:hover { gap: 10px; border-color: rgba(255,255,255,0.25); color: white; }
+        .sb-btn-signin::after { content: '→'; font-size: 1rem; font-weight: 800; }
 
         .sb-btn-learn {
           display: inline-flex; align-items: center; gap: 8px;
           padding: 13px 26px; border-radius: 100px;
-          background: #1a7a6e; color: white;
+          background: linear-gradient(135deg,#a855f7,#ec4899); color: white;
           font-size: 0.9rem; font-weight: 700;
           text-decoration: none; transition: all 0.22s;
-          box-shadow: 0 6px 20px rgba(26,122,110,0.35);
+          box-shadow: 0 6px 20px rgba(168,85,247,0.4);
         }
-        .sb-btn-learn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(26,122,110,0.45); background: #155f55; }
-        .sb-btn-learn::after { content: '+'; font-size: 1.1rem; font-weight: 900; }
+        .sb-btn-learn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(168,85,247,0.55); opacity: 0.92; }
+        .sb-btn-learn::after { content: '→'; font-size: 1.1rem; font-weight: 900; }
 
         /* stats row */
         .sb-hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
         .sb-hero-stat { display: flex; flex-direction: column; }
         .sb-hero-stat-val {
           font-size: 2.2rem; font-weight: 800; letter-spacing: -0.04em;
-          color: #0D1117; line-height: 1;
+          color: #ffffff; line-height: 1;
           display: flex; align-items: center; gap: 4px;
         }
-        .sb-hero-stat-val .bolt { font-size: 1.4rem; color: #1a7a6e; }
-        .sb-hero-stat-label { font-size: 0.78rem; color: #9ca3af; font-weight: 500; margin-top: 4px; }
+        .sb-hero-stat-val .bolt { font-size: 1.4rem; color: #a855f7; }
+        .sb-hero-stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.4); font-weight: 500; margin-top: 4px; }
 
         /* RIGHT — 3D character area */
         .sb-hero-right {
@@ -146,14 +146,14 @@ const Home = () => {
         .sb-char-ring {
           position: absolute;
           width: 460px; height: 460px; border-radius: 50%;
-          background: linear-gradient(135deg, #e8f7f5 0%, #f0faf8 100%);
+          background: radial-gradient(circle, rgba(168,85,247,0.12) 0%, rgba(6,182,212,0.06) 60%, transparent 100%);
           bottom: 0; left: 50%; transform: translateX(-50%);
           z-index: 0;
         }
         .sb-char-ring::before {
           content: '';
           position: absolute; inset: -14px; border-radius: 50%;
-          border: 1.5px dashed rgba(26,122,110,0.2);
+          border: 1.5px dashed rgba(168,85,247,0.25);
         }
 
         /* character image */
@@ -172,11 +172,11 @@ const Home = () => {
         /* floating pill badges */
         .sb-float-pill {
           position: absolute; z-index: 3;
-          background: white; border-radius: 100px;
+          background: #111827; border-radius: 100px;
           padding: 10px 18px;
-          box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+          box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.07);
           display: flex; align-items: center; gap: 10px;
-          font-size: 0.8rem; font-weight: 700; color: #0D1117;
+          font-size: 0.8rem; font-weight: 700; color: #ffffff;
           white-space: nowrap;
           animation: pillFloat 4s ease-in-out infinite;
         }
@@ -198,7 +198,7 @@ const Home = () => {
           50% { transform: translateY(calc(-50% - 8px)); }
         }
 
-        .sb-float-pill-sub { font-size: 0.68rem; color: #9ca3af; font-weight: 500; margin-top: 1px; }
+        .sb-float-pill-sub { font-size: 0.68rem; color: rgba(255,255,255,0.4); font-weight: 500; margin-top: 1px; }
 
         /* decorative dots */
         .sb-deco-dot {
@@ -213,7 +213,7 @@ const Home = () => {
         /* ── FEATURES ── */
         .sb-features {
           padding: 100px 80px;
-          background: #F7F8FA;
+          background: #0d1117;
         }
         .sb-features-top {
           display: flex; align-items: flex-end; justify-content: space-between;
@@ -221,19 +221,19 @@ const Home = () => {
         }
         .sb-features-tag {
           font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-          letter-spacing: 0.15em; color: #1a7a6e;
+          letter-spacing: 0.15em; color: #a855f7;
           display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
         }
         .sb-features-tag::before {
           content: ''; display: block; width: 24px; height: 2px;
-          background: #1a7a6e; border-radius: 2px;
+          background: linear-gradient(90deg,#a855f7,#ec4899); border-radius: 2px;
         }
         .sb-features-h2 {
           font-size: clamp(1.8rem, 3vw, 2.8rem);
-          font-weight: 800; letter-spacing: -0.03em; color: #0D1117; line-height: 1.1;
+          font-weight: 800; letter-spacing: -0.03em; color: #ffffff; line-height: 1.1;
         }
         .sb-features-sub {
-          font-size: 0.95rem; color: #9ca3af; max-width: 300px;
+          font-size: 0.95rem; color: rgba(255,255,255,0.4); max-width: 300px;
           line-height: 1.7; font-weight: 400; flex-shrink: 0;
         }
 
@@ -241,30 +241,31 @@ const Home = () => {
           display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
         }
         .sb-feat-card {
-          background: white; border-radius: 20px; padding: 32px 28px;
-          border: 1.5px solid #F0F0F0;
+          background: #111827; border-radius: 20px; padding: 32px 28px;
+          border: 1px solid rgba(255,255,255,0.06);
           transition: all 0.28s; cursor: default;
         }
         .sb-feat-card:hover {
           transform: translateY(-6px);
-          box-shadow: 0 16px 48px rgba(0,0,0,0.07);
-          border-color: #d1faf4;
+          box-shadow: 0 16px 48px rgba(168,85,247,0.15);
+          border-color: rgba(168,85,247,0.3);
         }
         .sb-feat-emoji-wrap {
           width: 52px; height: 52px; border-radius: 14px;
-          background: #f0faf8; display: flex; align-items: center; justify-content: center;
+          background: rgba(168,85,247,0.12); display: flex; align-items: center; justify-content: center;
           font-size: 1.6rem; margin-bottom: 18px;
           transition: transform 0.3s;
         }
         .sb-feat-card:hover .sb-feat-emoji-wrap { transform: scale(1.1) rotate(-5deg); }
-        .sb-feat-title { font-size: 1rem; font-weight: 700; color: #0D1117; margin-bottom: 8px; }
-        .sb-feat-desc { font-size: 0.855rem; color: #9ca3af; line-height: 1.65; font-weight: 400; }
+        .sb-feat-title { font-size: 1rem; font-weight: 700; color: #ffffff; margin-bottom: 8px; }
+        .sb-feat-desc { font-size: 0.855rem; color: rgba(255,255,255,0.4); line-height: 1.65; font-weight: 400; }
 
         /* ── CTA ── */
         .sb-cta {
           margin: 0 80px 100px;
           border-radius: 28px;
-          background: #0D1117;
+          background: linear-gradient(135deg, #1a0a3c 0%, #0d1b2e 100%);
+          border: 1px solid rgba(168,85,247,0.2);
           padding: 80px 72px;
           display: flex; align-items: center; justify-content: space-between;
           gap: 48px; position: relative; overflow: hidden;
@@ -272,48 +273,48 @@ const Home = () => {
         .sb-cta::before {
           content: '';
           position: absolute; width: 400px; height: 400px; border-radius: 50%;
-          background: radial-gradient(circle, rgba(26,122,110,0.35) 0%, transparent 70%);
+          background: radial-gradient(circle, rgba(168,85,247,0.25) 0%, transparent 70%);
           right: -80px; top: -80px; pointer-events: none;
         }
         .sb-cta::after {
           content: '';
           position: absolute; width: 250px; height: 250px; border-radius: 50%;
-          background: radial-gradient(circle, rgba(26,122,110,0.2) 0%, transparent 70%);
+          background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%);
           left: -40px; bottom: -80px; pointer-events: none;
         }
         .sb-cta-left { position: relative; z-index: 1; }
         .sb-cta-tag {
           font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-          letter-spacing: 0.15em; color: #4ecca3;
+          letter-spacing: 0.15em; color: #a855f7;
           display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
         }
         .sb-cta-tag::before {
           content: ''; display: block; width: 24px; height: 2px;
-          background: #4ecca3; border-radius: 2px;
+          background: linear-gradient(90deg,#a855f7,#ec4899); border-radius: 2px;
         }
         .sb-cta-h2 {
           font-size: clamp(1.8rem, 3vw, 2.8rem);
           font-weight: 800; color: white; letter-spacing: -0.03em;
           line-height: 1.1; max-width: 500px;
         }
-        .sb-cta-h2 span { color: #4ecca3; }
+        .sb-cta-h2 span { background: linear-gradient(135deg,#a855f7,#ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
         .sb-cta-p { font-size: 0.95rem; color: rgba(255,255,255,0.5); margin-top: 14px; line-height: 1.7; }
         .sb-cta-right { flex-shrink: 0; position: relative; z-index: 1; text-align: right; }
         .sb-btn-cta {
           display: inline-flex; align-items: center; gap: 10px;
           padding: 16px 34px; border-radius: 100px;
-          background: #1a7a6e; color: white;
+          background: linear-gradient(135deg,#a855f7,#ec4899); color: white;
           font-size: 1rem; font-weight: 700; text-decoration: none;
           transition: all 0.25s;
-          box-shadow: 0 8px 24px rgba(26,122,110,0.4);
+          box-shadow: 0 8px 24px rgba(168,85,247,0.45);
           white-space: nowrap;
         }
-        .sb-btn-cta:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(26,122,110,0.55); background: #155f55; }
+        .sb-btn-cta:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(168,85,247,0.6); opacity: 0.92; }
         .sb-cta-note { font-size: 0.78rem; color: rgba(255,255,255,0.3); margin-top: 10px; }
 
         /* ── FOOTER ── */
         .sb-footer {
-          background: #0D1117; padding: 32px 80px;
+          background: #0d1b2e; padding: 32px 80px;
           display: flex; align-items: center; justify-content: space-between;
           flex-wrap: wrap; gap: 16px;
           border-top: 1px solid rgba(255,255,255,0.06);
@@ -325,7 +326,7 @@ const Home = () => {
         }
         .sb-footer-logo-mark {
           width: 30px; height: 30px; border-radius: 9px;
-          background: #1a7a6e;
+          background: linear-gradient(135deg,#a855f7,#ec4899);
           display: flex; align-items: center; justify-content: center; color: white;
         }
         .sb-footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.25); }

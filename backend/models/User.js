@@ -30,8 +30,15 @@ const User = sequelize.define("User", {
   phone: DataTypes.STRING,
   bio: DataTypes.TEXT,
   grade: DataTypes.STRING,
-  school: DataTypes.STRING
+  school: DataTypes.STRING,
+  profilePic: DataTypes.STRING
 
 });
+
+// Define associations
+User.associate = (models) => {
+  User.hasMany(models.Message, { as: "sentMessages", foreignKey: "senderId" });
+  User.hasMany(models.Message, { as: "receivedMessages", foreignKey: "receiverId" });
+};
 
 module.exports = User;

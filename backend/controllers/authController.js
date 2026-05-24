@@ -40,3 +40,32 @@ exports.login = async (req,res)=>{
   res.json({token,user});
 
 };
+
+exports.socialLogin = async (req, res) => {
+  const { email, name, role } = req.body;
+
+  try {
+    let user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      // Create user if they don't exist
+      user = await User.create({
+        name,
+        email,
+        role: role || "student", // default to student if not provided
+        // No password needed for social login
+      });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({ token, user });
+  } catch (error) {
+    console.error("Social login error:", error);
+    res.status(500).json({ error: "Failed to authenticate" });
+  }
+};
